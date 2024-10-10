@@ -1,5 +1,5 @@
-﻿using Common.Data;
-using Common.Interfaces;
+﻿using Common.Interfaces;
+using Data;
 using Features;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,21 +30,5 @@ public class WheelController : ControllerBase
     {
         var result = new WheelFeatures(_wheelRetriever).GetWheelSettings().Result;
         return ToActionResult(result);
-    }
-
-    private class WheelRetriever : IWheelRetriever
-    {
-        public async Task<WheelSetting?> GetWheelSetting(string wheelId)
-        {
-            return new WheelSetting();
-        }
-
-        public async Task<IEnumerable<WheelSetting>> GetWheelSettings()
-        {
-            return new List<WheelSetting>
-            {
-                new()
-            };
-        }
     }
 }
