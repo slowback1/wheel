@@ -10,19 +10,23 @@
 	import ToastWrapper from '$lib/ui/containers/toast/ToastWrapper.svelte';
 	import FeatureFlagService from '$lib/services/FeatureFlag/FeatureFlagService';
 	import ConfigFeatureFlagProvider from '$lib/services/FeatureFlag/ConfigFeatureFlagProvider';
+	import ApiService from '$lib/services/Api/ApiService';
 
 	let currentTheme: ColorTheme = ColorTheme.Light;
+	let initialized = false;
 
 	onMount(() => {
 		MessageBus.initialize(getRealStorageProvider());
 		UrlPathProvider.initialize(new RealUrlProvider());
 		ConfigService.initialize();
 		FeatureFlagService.initialize(new ConfigFeatureFlagProvider());
+		ApiService.initialize();
 
 		MessageBus.subscribe<ColorTheme>(
 			Messages.CurrentTheme,
 			(value) => (currentTheme = value ?? ColorTheme.Light)
 		);
+		initialized = true;
 	});
 </script>
 
@@ -33,7 +37,11 @@
 	<ToastWrapper />
 	<Header />
 	<main id="content" class="main-content">
-		<slot />
+		{#if initialized}
+			<slot />
+		{:else}
+			<div>Loading...</div>
+		{/if}
 	</main>
 </div>
 
