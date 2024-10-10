@@ -1,0 +1,78 @@
+﻿using Common.Data;
+using TestUtilities.MockImplementations;
+
+namespace Features.Tests;
+
+public class WheelFeatureTests
+{
+    [Test]
+    public async Task CanGetAWheelSettingById()
+    {
+        var features = new WheelFeatures(new TestWheelRetriever());
+
+        var result = await features.GetWheelSetting("1");
+
+        Assert.NotNull(result);
+
+        Assert.That(result.Data.Name, Is.EqualTo("Name"));
+        Assert.That(result.Data.Slices.Count(), Is.EqualTo(1));
+        Assert.That(result.Data.Slices.First().Label, Is.EqualTo("Label"));
+        Assert.That(result.Data.Slices.First().Size, Is.EqualTo(1));
+
+        Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.Ok));
+    }
+
+    [Test]
+    public async Task CanGetAWheelSettingByIdNotFound()
+    {
+        var features = new WheelFeatures(new TestWheelRetriever());
+
+        var result = await features.GetWheelSetting(TestWheelRetriever.NotFoundId);
+
+        Assert.Null(result.Data);
+        Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.NotFound));
+    }
+
+    [Test]
+    public async Task CanGetAWheelSettingByIdError()
+    {
+        var features = new WheelFeatures(new TestWheelRetriever());
+
+        var result = await features.GetWheelSetting(TestWheelRetriever.ErrorId);
+
+        Assert.Null(result.Data);
+        Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.Error));
+        Assert.NotNull(result.Exception);
+        Assert.That(result.Exception.Message, Is.EqualTo("Error"));
+    }
+
+    [Test]
+    public async Task CanGetAllWheelSettings()
+    {
+        var features = new WheelFeatures(new TestWheelRetriever());
+
+        var result = await features.GetWheelSettings();
+
+        Assert.NotNull(result);
+        Assert.That(result.Data.Count(), Is.EqualTo(1));
+        Assert.That(result.Data.First().Name, Is.EqualTo("Name"));
+        Assert.That(result.Data.First().Slices.Count(), Is.EqualTo(1));
+        Assert.That(result.Data.First().Slices.First().Label, Is.EqualTo("Label"));
+        Assert.That(result.Data.First().Slices.First().Size, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task CanGetAllWheelSettingsError()
+    {
+        var retriever = new TestWheelRetriever();
+        retriever.SetShouldThrowWhenGettingAllSettings(true);
+        var features = new WheelFeatures(retriever);
+
+        var result = await features.GetWheelSettings();
+
+        Assert.Null(result.Data);
+        Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.Error));
+        Assert.NotNull(result.Exception);
+        Assert.That(result.Exception.Message, Is.EqualTo("Error"));
+    }
+}

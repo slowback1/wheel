@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Common.Data;
 
 namespace Common.Interfaces;
 
 public interface IWheelRetriever
 {
-    WheelSetting GetWheelSetting(string wheelId);
-    IEnumerable<WheelSetting> GetWheelSettings();
+    Task<WheelSetting?> GetWheelSetting(string wheelId);
+    Task<IEnumerable<WheelSetting>> GetWheelSettings();
 }
