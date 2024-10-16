@@ -1,5 +1,5 @@
 ﻿using Common.Interfaces;
-using Data;
+using Data.InMemory;
 using Features;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +13,7 @@ public class WheelController : ControllerBase
 
     public WheelController()
     {
-        _wheelRetriever = new WheelRetriever();
+        _wheelRetriever = new InMemoryWheelRetriever();
     }
 
     [Route("{wheelId}")]
