@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Data;
 using Common.Interfaces;
+using Infrastructure.Messaging;
 
 namespace Features;
 
@@ -54,6 +55,8 @@ public class WheelFeatures
             var result = await _wheelCreator.CreateWheelSetting(settingToCreate);
 
             if (!result.SaveSuccessful) return FeatureResult<WheelSetting>.Error(new Exception(result.ErrorMessage));
+
+            await MessageBus.PublishAsync(Messages.WheelSettingCreated, settingToCreate);
 
             return FeatureResult<WheelSetting>.Ok(settingToCreate);
         }

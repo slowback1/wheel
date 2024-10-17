@@ -1,4 +1,5 @@
 ﻿using Common.Data;
+using Infrastructure.Messaging;
 using TestUtilities;
 using TestUtilities.MockImplementations;
 using TestUtilities.TestData;
@@ -7,6 +8,13 @@ namespace Features.Tests;
 
 public class WheelFeatureTests : BaseDataTest
 {
+    [TearDown]
+    public void ClearMessageBus()
+    {
+        MessageBus.ClearMessages();
+        MessageBus.ClearSubscribers();
+    }
+
     [Test]
     public async Task CanGetAWheelSettingById()
     {
@@ -118,5 +126,36 @@ public class WheelFeatureTests : BaseDataTest
         var result = await features.CreateWheelSetting(new WheelSetting { Name = TestWheelCreator.NameThatErrors });
         Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.Error));
         Assert.That(result.Exception.Message, Is.EqualTo("Error"));
+    }
+
+    [Test]
+    public async Task SendsAWheelCreatedMessageWhenTheSaveSucceeds()
+    {
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
+
+        var settingToCreate = TestWheelSettings.GetTestWheelSetting();
+
+        var result = await features.CreateWheelSetting(settingToCreate);
+
+        var lastMessage = MessageBus.GetLastMessage<WheelSetting>(Messages.WheelSettingCreated);
+
+        Assert.That(lastMessage, Is.Not.Null);
+        Assert.That(lastMessage.Name, Is.EqualTo(settingToCreate.Name));
+    }
+
+    [Test]
+    public async Task DoesNotSendAWheelCreatedMessageWhenTheSaveFails()
+    {
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
+        var result = await features.CreateWheelSetting(new WheelSetting { Name = TestWheelCreator.NameThatFails });
+        Assert.That(MessageBus.GetLastMessage<WheelSetting>(Messages.WheelSettingCreated), Is.Null);
+    }
+
+    [Test]
+    public async Task DoesNotSendAWheelCreatedMessageWhenTheSaveErrors()
+    {
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
+        var result = await features.CreateWheelSetting(new WheelSetting { Name = TestWheelCreator.NameThatErrors });
+        Assert.That(MessageBus.GetLastMessage<WheelSetting>(Messages.WheelSettingCreated), Is.Null);
     }
 }
