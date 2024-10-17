@@ -1,15 +1,16 @@
 ﻿using Common.Data;
+using TestUtilities;
 using TestUtilities.MockImplementations;
 using TestUtilities.TestData;
 
 namespace Features.Tests;
 
-public class WheelFeatureTests
+public class WheelFeatureTests : BaseDataTest
 {
     [Test]
     public async Task CanGetAWheelSettingById()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
 
         var result = await features.GetWheelSetting("1");
 
@@ -26,7 +27,7 @@ public class WheelFeatureTests
     [Test]
     public async Task CanGetAWheelSettingByIdNotFound()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
 
         var result = await features.GetWheelSetting(TestWheelRetriever.NotFoundId);
 
@@ -37,7 +38,7 @@ public class WheelFeatureTests
     [Test]
     public async Task CanGetAWheelSettingByIdError()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
 
         var result = await features.GetWheelSetting(TestWheelRetriever.ErrorId);
 
@@ -50,7 +51,7 @@ public class WheelFeatureTests
     [Test]
     public async Task CanGetAllWheelSettings()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
 
         var result = await features.GetWheelSettings();
 
@@ -67,7 +68,7 @@ public class WheelFeatureTests
     {
         var retriever = new TestWheelRetriever();
         retriever.SetShouldThrowWhenGettingAllSettings(true);
-        var features = new WheelFeatures(retriever, new TestWheelCreator());
+        var features = new WheelFeatures(retriever, Data.WheelCreator);
 
         var result = await features.GetWheelSettings();
 
@@ -81,7 +82,7 @@ public class WheelFeatureTests
     [Test]
     public async Task ReturnsTheWheelSettingWhenCreatingAWheelSetting()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
 
         var settingToCreate = TestWheelSettings.GetTestWheelSetting();
 
@@ -95,7 +96,7 @@ public class WheelFeatureTests
     [Test]
     public async Task CreatesAWheelSetting()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
         var settingToCreate = TestWheelSettings.GetTestWheelSetting();
         var result = await features.CreateWheelSetting(settingToCreate);
         Assert.That(TestWheelCreator.LastCreatedWheelSetting, Is.EqualTo(settingToCreate));
@@ -104,7 +105,7 @@ public class WheelFeatureTests
     [Test]
     public async Task ReturnsAnErrorResultWhenTheSaveFails()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
         var result = await features.CreateWheelSetting(new WheelSetting { Name = TestWheelCreator.NameThatFails });
         Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.Error));
         Assert.That(result.Exception.Message, Is.EqualTo("Failed to create wheel"));
@@ -113,7 +114,7 @@ public class WheelFeatureTests
     [Test]
     public async Task ReturnsAnErrorResultWhenTheSaveErrors()
     {
-        var features = new WheelFeatures(new TestWheelRetriever(), new TestWheelCreator());
+        var features = new WheelFeatures(Data.WheelRetriever, Data.WheelCreator);
         var result = await features.CreateWheelSetting(new WheelSetting { Name = TestWheelCreator.NameThatErrors });
         Assert.That(result.Status, Is.EqualTo(FeatureResultStatus.Error));
         Assert.That(result.Exception.Message, Is.EqualTo("Error"));
