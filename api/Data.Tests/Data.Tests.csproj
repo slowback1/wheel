@@ -23,6 +23,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Data\Data.csproj"/>
+        <ProjectReference Include="..\TestUtilities\TestUtilities.csproj"/>
     </ItemGroup>
 
 </Project>

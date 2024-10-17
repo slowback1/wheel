@@ -8,11 +8,13 @@ namespace Features;
 
 public class WheelFeatures
 {
+    private readonly IWheelCreator _wheelCreator;
     private readonly IWheelRetriever _wheelRetriever;
 
-    public WheelFeatures(IWheelRetriever wheelRetriever)
+    public WheelFeatures(IWheelRetriever wheelRetriever, IWheelCreator wheelCreator)
     {
         _wheelRetriever = wheelRetriever;
+        _wheelCreator = wheelCreator;
     }
 
     public async Task<FeatureResult<WheelSetting>> GetWheelSetting(string wheelId)
@@ -42,6 +44,22 @@ public class WheelFeatures
         catch (Exception e)
         {
             return FeatureResult<IEnumerable<WheelSetting>>.Error(e);
+        }
+    }
+
+    public async Task<FeatureResult<WheelSetting>> CreateWheelSetting(WheelSetting settingToCreate)
+    {
+        try
+        {
+            var result = await _wheelCreator.CreateWheelSetting(settingToCreate);
+
+            if (!result.SaveSuccessful) return FeatureResult<WheelSetting>.Error(new Exception(result.ErrorMessage));
+
+            return FeatureResult<WheelSetting>.Ok(settingToCreate);
+        }
+        catch (Exception e)
+        {
+            return FeatureResult<WheelSetting>.Error(e);
         }
     }
 }
