@@ -14,3 +14,10 @@
         Given I have created two wheels
         When I view my wheels
         Then I should see two wheels
+
+    @ignore
+    @not-implemented
+    Scenario: User edits a wheel
+        Given I have created a wheel
+        When I edit the wheel
+        Then The wheel should be updated

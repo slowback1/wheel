@@ -88,4 +88,30 @@ public sealed class WheelCreationStepDefinitions
         Assert.That(Wheels.Any(w => w.Name == "Wheel 1"), Is.True);
         Assert.That(Wheels.Any(w => w.Name == "Wheel 2"), Is.True);
     }
+
+    [Given(@"I have created a wheel")]
+    public async Task GivenIHaveCreatedAWheel()
+    {
+        SetUpWheelFeatures();
+
+        await CreateWheel(WheelName);
+    }
+
+    [When(@"I edit the wheel")]
+    public void WhenIEditTheWheel()
+    {
+        Assert.Fail("Feature not implemented");
+    }
+
+    [Then(@"The wheel should be updated")]
+    public async Task ThenTheWheelShouldBeUpdated()
+    {
+        var wheel = await _wheelFeatures.GetWheelSetting(WheelName);
+
+        Assert.That(wheel.Data, Is.Not.Null);
+
+        Assert.That(wheel.Data.Slices.Count(), Is.EqualTo(2));
+        Assert.That(wheel.Data.Slices.Last().Label, Is.EqualTo("New Slice"));
+        Assert.That(wheel.Data.Slices.Last().Size, Is.EqualTo(2));
+    }
 }
