@@ -1,5 +1,5 @@
-﻿using Common.Data;
-using Data.InMemory;
+﻿using Data.InMemory;
+using Features.BDD.Tests.Dsl;
 using TechTalk.SpecFlow;
 
 namespace Features.BDD.Tests.StepDefinitions;
@@ -7,10 +7,7 @@ namespace Features.BDD.Tests.StepDefinitions;
 [Binding]
 public sealed class WheelCreationStepDefinitions
 {
-    private const string WheelName = "Test Wheel";
-    private WheelFeatures _wheelFeatures { get; set; }
-
-    private IEnumerable<WheelSetting> Wheels { get; set; }
+    private WheelDsl Feature { get; set; }
 
     [Before]
     public void ClearData()
@@ -21,80 +18,61 @@ public sealed class WheelCreationStepDefinitions
     [Given("I intend to create a wheel")]
     public void GivenIIntendToCreateAWheel()
     {
-        SetUpWheelFeatures();
-    }
-
-    private void SetUpWheelFeatures()
-    {
         var dataAccess = new InMemoryDataAccess();
 
-        _wheelFeatures = new WheelFeatures(dataAccess.WheelRetriever, dataAccess.WheelCreator);
-    }
-
-    private async Task CreateWheel(string name)
-    {
-        await _wheelFeatures.CreateWheelSetting(new WheelSetting
-        {
-            Name = name,
-            Slices = new[] { new WheelSlice { Label = "label", Size = 1 } }
-        });
+        Feature = new WheelDslNoInitialData(dataAccess);
     }
 
     [When("I create a wheel")]
     public async Task CreateAWheel()
     {
-        await CreateWheel(WheelName);
+        await Feature.CreateWheel(Feature.FirstWheelName);
     }
 
     [Then("The wheel should be created")]
     public async Task ThenTheWheelShouldBeCreated()
     {
-        var settings = await _wheelFeatures.GetWheelSettings();
-
-        Assert.That(settings.Data, Is.Not.Null);
-        Assert.That(settings.Data.Count(), Is.GreaterThan(0));
+        await Feature.AssertThereIsAnyWheelData();
     }
 
     [Then("I should be able to access the wheel")]
     public async Task ThenIShouldBeAbleToAccessTheWheel()
     {
-        var wheel = await _wheelFeatures.GetWheelSetting(WheelName);
-
-        Assert.That(wheel.Data, Is.Not.Null);
-
-        Assert.That(wheel.Data.Name, Is.EqualTo(WheelName));
+        await Feature.AssertWheelExists(Feature.FirstWheelName);
     }
 
     [Given(@"I have created two wheels")]
     public async Task GivenIHaveCreatedTwoWheels()
     {
-        SetUpWheelFeatures();
+        var dataAccess = new InMemoryDataAccess();
 
-        await CreateWheel("Wheel 1");
-        await CreateWheel("Wheel 2");
+        Feature = new WheelDslTwoWheels(dataAccess);
     }
 
     [When(@"I view my wheels")]
     public async Task WhenIViewMyWheels()
     {
-        Wheels = (await _wheelFeatures.GetWheelSettings()).Data!;
+        await Feature.LoadWheels();
     }
 
     [Then(@"I should see two wheels")]
     public void ThenIShouldSeeTwoWheels()
     {
-        Assert.That(Wheels.Count(), Is.EqualTo(2));
+        var wheels = Feature.LastLoadedWheels;
 
-        Assert.That(Wheels.Any(w => w.Name == "Wheel 1"), Is.True);
-        Assert.That(Wheels.Any(w => w.Name == "Wheel 2"), Is.True);
+        Assert.That(wheels, Is.Not.Null);
+        Assert.That(wheels.Count(), Is.EqualTo(2));
+
+        Assert.That(wheels.Any(w => w.Name == Feature.FirstWheelName), Is.True);
+        Assert.That(wheels.Any(w => w.Name == Feature.SecondWheelName), Is.True);
     }
 
     [Given(@"I have created a wheel")]
     public async Task GivenIHaveCreatedAWheel()
     {
-        SetUpWheelFeatures();
+        var dataAccess = new InMemoryDataAccess();
 
-        await CreateWheel(WheelName);
+        Feature = new WheelDslOneWheel(dataAccess);
     }
 
     [When(@"I edit the wheel")]
@@ -106,12 +84,12 @@ public sealed class WheelCreationStepDefinitions
     [Then(@"The wheel should be updated")]
     public async Task ThenTheWheelShouldBeUpdated()
     {
-        var wheel = await _wheelFeatures.GetWheelSetting(WheelName);
+        var wheel = await Feature.GetWheel(Feature.FirstWheelName);
 
-        Assert.That(wheel.Data, Is.Not.Null);
+        Assert.That(wheel, Is.Not.Null);
 
-        Assert.That(wheel.Data.Slices.Count(), Is.EqualTo(2));
-        Assert.That(wheel.Data.Slices.Last().Label, Is.EqualTo("New Slice"));
-        Assert.That(wheel.Data.Slices.Last().Size, Is.EqualTo(2));
+        Assert.That(wheel.Slices.Count(), Is.EqualTo(2));
+        Assert.That(wheel.Slices.Last().Label, Is.EqualTo("New Slice"));
+        Assert.That(wheel.Slices.Last().Size, Is.EqualTo(2));
     }
 }
