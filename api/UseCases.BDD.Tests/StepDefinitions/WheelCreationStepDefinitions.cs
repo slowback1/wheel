@@ -1,8 +1,8 @@
 ﻿using Data.InMemory;
-using Features.BDD.Tests.Dsl;
 using TechTalk.SpecFlow;
+using UseCases.BDD.Tests.Dsl;
 
-namespace Features.BDD.Tests.StepDefinitions;
+namespace UseCases.BDD.Tests.StepDefinitions;
 
 [Binding]
 public sealed class WheelCreationStepDefinitions

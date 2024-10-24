@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Common.Data;
 using Infrastructure.Messaging;
 
-namespace Features.Listeners;
+namespace UseCases.Listeners;
 
 public class WheelSettingCreationLogger : MessageBusListener<WheelSetting>
 {

@@ -1,6 +1,6 @@
 ﻿using Common.Interfaces;
 
-namespace Features.BDD.Tests.Dsl;
+namespace UseCases.BDD.Tests.Dsl;
 
 public class WheelDslOneWheel : WheelDsl
 {

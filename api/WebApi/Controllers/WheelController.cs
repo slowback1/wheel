@@ -1,6 +1,6 @@
 ﻿using Common.Data;
-using Features;
 using Microsoft.AspNetCore.Mvc;
+using UseCases.Wheel;
 
 namespace WebApi.Controllers;
 
@@ -8,19 +8,13 @@ namespace WebApi.Controllers;
 [Route("Wheel")]
 public class WheelController : ControllerBase
 {
-    private readonly WheelFeatures _wheelFeatures;
-
-    public WheelController()
-    {
-        _wheelFeatures = new WheelFeatures(_dataAccess.WheelRetriever, _dataAccess.WheelCreator);
-    }
-
-
     [Route("{wheelId}")]
     [HttpGet]
     public async Task<ActionResult> GetWheel(string wheelId)
     {
-        var result = await _wheelFeatures.GetWheelSetting(wheelId);
+        var useCase = new GetWheelSettingUseCase(_dataAccess);
+
+        var result = await useCase.GetWheelSetting(wheelId);
         return ToActionResult(result);
     }
 
@@ -28,7 +22,9 @@ public class WheelController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetWheels()
     {
-        var result = await _wheelFeatures.GetWheelSettings();
+        var useCase = new GetWheelSettingsUseCase(_dataAccess);
+
+        var result = await useCase.GetWheelSettings();
         return ToActionResult(result);
     }
 
@@ -36,7 +32,9 @@ public class WheelController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateWheel([FromBody] WheelSetting wheelSetting)
     {
-        var result = await _wheelFeatures.CreateWheelSetting(wheelSetting);
+        var useCase = new CreateWheelSettingUseCase(_dataAccess);
+
+        var result = await useCase.CreateWheelSetting(wheelSetting);
         return ToActionResult(result);
     }
 }
