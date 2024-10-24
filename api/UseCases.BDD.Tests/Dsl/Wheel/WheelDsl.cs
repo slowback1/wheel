@@ -1,5 +1,6 @@
 ﻿using Common.Data;
 using Common.Interfaces;
+using TestUtilities.MockImplementations;
 using UseCases.Wheel;
 
 namespace UseCases.BDD.Tests.Dsl;
@@ -17,9 +18,11 @@ public abstract class WheelDsl
 
     public string FirstWheelName { get; set; } = "Test Wheel";
     public string SecondWheelName { get; set; } = "Test Wheel 2";
+    public string NonExistantWheelName { get; set; } = "Non Existant Wheel";
 
-    public WheelSetting? LastLoadedWheel { get; set; }
-    public IEnumerable<WheelSetting>? LastLoadedWheels { get; set; }
+    public FeatureResult<WheelSetting>? LastLoadedWheel { get; set; }
+    public FeatureResult<WheelSetting>? LastCreatedWheel { get; set; }
+    public FeatureResult<IEnumerable<WheelSetting>>? LastLoadedWheels { get; set; }
 
     protected CreateWheelSettingUseCase CreateWheelSettingUseCase { get; set; }
     protected GetWheelSettingUseCase GetWheelSettingUseCase { get; set; }
@@ -36,21 +39,32 @@ public abstract class WheelDsl
             Slices = new[] { new WheelSlice { Label = "Label", Size = 1 } }
         };
 
-        await CreateWheelSettingUseCase.CreateWheelSetting(wheel);
+        var result = await CreateWheelSettingUseCase.CreateWheelSetting(wheel);
+
+        LastCreatedWheel = result;
 
         return wheel;
     }
 
-    public async Task<WheelSetting?> GetWheel(string name)
+    public void CauseGetWheelsToError()
     {
-        return (await GetWheelSettingUseCase.GetWheelSetting(name)).Data;
+        var dataAccess = new TestDataAccess();
+        var retriever = dataAccess.WheelRetriever as TestWheelRetriever;
+        retriever!.SetShouldThrowWhenGettingAllSettings(true);
+
+        GetWheelSettingsUseCase = new GetWheelSettingsUseCase(dataAccess);
+    }
+
+    public async Task<FeatureResult<WheelSetting>> GetWheel(string name)
+    {
+        return await GetWheelSettingUseCase.GetWheelSetting(name);
     }
 
     public async Task AssertWheelExists(string name)
     {
         var wheel = await GetWheel(name);
 
-        Assert.That(wheel, Is.Not.Null);
+        Assert.That(wheel.Data, Is.Not.Null);
     }
 
     public async Task AssertThereIsAnyWheelData()
@@ -67,6 +81,6 @@ public abstract class WheelDsl
 
     public async Task LoadWheels()
     {
-        LastLoadedWheels = (await GetWheelSettingsUseCase.GetWheelSettings()).Data;
+        LastLoadedWheels = await GetWheelSettingsUseCase.GetWheelSettings();
     }
 }

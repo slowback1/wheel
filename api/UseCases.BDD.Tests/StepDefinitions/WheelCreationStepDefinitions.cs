@@ -1,4 +1,6 @@
-﻿using Data.InMemory;
+﻿using Common.Data;
+using Data.InMemory;
+using Infrastructure.Messaging;
 using TechTalk.SpecFlow;
 using UseCases.BDD.Tests.Dsl;
 
@@ -58,10 +60,10 @@ public sealed class WheelCreationStepDefinitions
     [Then(@"I should see two wheels")]
     public void ThenIShouldSeeTwoWheels()
     {
-        var wheels = Feature.LastLoadedWheels;
+        var wheels = Feature.LastLoadedWheels!.Data;
 
         Assert.That(wheels, Is.Not.Null);
-        Assert.That(wheels.Count(), Is.EqualTo(2));
+        Assert.That(wheels!.Count(), Is.EqualTo(2));
 
         Assert.That(wheels.Any(w => w.Name == Feature.FirstWheelName), Is.True);
         Assert.That(wheels.Any(w => w.Name == Feature.SecondWheelName), Is.True);
@@ -84,12 +86,63 @@ public sealed class WheelCreationStepDefinitions
     [Then(@"The wheel should be updated")]
     public async Task ThenTheWheelShouldBeUpdated()
     {
-        var wheel = await Feature.GetWheel(Feature.FirstWheelName);
+        var wheel = (await Feature.GetWheel(Feature.FirstWheelName)).Data;
 
         Assert.That(wheel, Is.Not.Null);
 
         Assert.That(wheel.Slices.Count(), Is.EqualTo(2));
         Assert.That(wheel.Slices.Last().Label, Is.EqualTo("New Slice"));
         Assert.That(wheel.Slices.Last().Size, Is.EqualTo(2));
+    }
+
+    [When(@"I try to access a wheel that does not exist")]
+    public async Task WhenITryToAccessAWheelThatDoesNotExist()
+    {
+        await Feature.LoadWheel(Feature.NonExistantWheelName);
+    }
+
+    [Then(@"I should be notified that the wheel does not exist")]
+    public async Task ThenIShouldBeNotifiedThatTheWheelDoesNotExist()
+    {
+        var wheel = Feature.LastLoadedWheel;
+
+        Assert.That(wheel.Status, Is.EqualTo(FeatureResultStatus.NotFound));
+    }
+
+    [When(@"I try to create a wheel with the same name")]
+    public async Task WhenITryToCreateAWheelWithTheSameName()
+    {
+        await Feature.CreateWheel(Feature.FirstWheelName);
+    }
+
+    [Then(@"I should be notified that the wheel already exists")]
+    public void ThenIShouldBeNotifiedThatTheWheelAlreadyExists()
+    {
+        var lastCreatedResult = Feature.LastCreatedWheel!;
+
+        Assert.That(lastCreatedResult.Status, Is.EqualTo(FeatureResultStatus.Error));
+    }
+
+    [When(@"I try to get my wheels and an error occurs")]
+    public async Task WhenITryToGetMyWheelsAndAnErrorOccurs()
+    {
+        Feature.CauseGetWheelsToError();
+
+        await Feature.LoadWheels();
+    }
+
+    [Then(@"I should be notified that an error occurred")]
+    public void ThenIShouldBeNotifiedThatAnErrorOccurred()
+    {
+        Assert.That(Feature.LastLoadedWheels!.Status, Is.EqualTo(FeatureResultStatus.Error));
+    }
+
+    [Then(@"The message bus should broadcast the wheel creation")]
+    public void ThenTheMessageBusShouldBroadcastTheWheelCreation()
+    {
+        var lastMessage = MessageBus.GetLastMessage<WheelSetting>(Messages.WheelSettingCreated);
+
+        Assert.That(lastMessage, Is.Not.Null);
+        Assert.That(lastMessage!.Name, Is.EqualTo(Feature.FirstWheelName));
     }
 }
