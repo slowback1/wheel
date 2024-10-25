@@ -41,3 +41,38 @@
         Given I have created a wheel
         When I edit the wheel
         Then The wheel should be updated
+
+    @ignore
+    @not-implemented
+    Scenario: User tries to edit a wheel that does not exist
+        Given I have created a wheel
+        When I try to edit a wheel that does not exist
+        Then I should be notified that the wheel does not exist
+
+    @ignore
+    @not-implemented
+    Scenario: User tries to edit a wheel but the system fails to save
+        Given I have created a wheel
+        When I try to edit a wheel but the system fails to save
+        Then I should be notified that the system failed to save the wheel
+
+    @ignore
+    @not-implemented
+    Scenario: User deletes a wheel
+        Given I have created a wheel
+        When I delete the wheel
+        Then The wheel should be deleted
+
+    @ignore
+    @not-implemented
+    Scenario: User tries to delete a wheel that does not exist
+        Given I have created a wheel
+        When I try to delete a wheel that does not exist
+        Then I should be notified that the wheel does not exist
+
+    @ignore
+    @not-implemented
+    Scenario: User tries to delete a wheel but the system fails to save
+        Given I have created a wheel
+        When I try to delete a wheel but the system fails to save
+        Then I should be notified that the system failed to save the wheel
