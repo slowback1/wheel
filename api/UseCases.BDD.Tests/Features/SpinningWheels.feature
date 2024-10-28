@@ -5,8 +5,11 @@
         When I spin the wheel
         Then The wheel should land on one of the slices
 
-    @ignore
-    @not-implemented
+    Scenario: User tries to spin a wheel with no slices
+        Given I have a wheel with no slices
+        When I spin the wheel
+        Then I should see an error message denoting that the wheel has no slices
+
     Scenario: User spins a rigged wheel
         Given I have a wheel with "Red", "Green", "Blue"
         And I have rigged the wheel to land on "Red"

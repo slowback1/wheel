@@ -86,4 +86,16 @@ public class SpinningWheelsStepDefinitions
     {
         Feature.AssertThatWheelHasLandedOnResultNTimes(new[] { first, second }, numberOfTimes);
     }
+
+    [Given(@"I have a wheel with no slices")]
+    public void GivenIHaveAWheelWithNoSlices()
+    {
+        Feature = new SpinningDslNoSlices();
+    }
+
+    [Then(@"I should see an error message denoting that the wheel has no slices")]
+    public void ThenIShouldSeeAnErrorMessageDenotingThatTheWheelHasNoSlices()
+    {
+        Feature.AssertThatWheelSpinErroredWith("Wheel has no slices");
+    }
 }

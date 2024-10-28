@@ -6,12 +6,16 @@ namespace UseCases.BDD.Tests.Dsl.Spinning;
 public abstract class SpinningDsl
 {
     private List<SpinResult> SpinHistory { get; } = new();
+    private string? LastErrorMessage { get; set; }
+    private WheelSpinOptions? NextSpinOptions { get; set; }
 
     protected abstract WheelSetting GetWheel();
 
     public void RigTheWheelToLandOn(string result)
     {
-        Assert.Fail("Not Implemented");
+        var index = GetWheel().Slices.ToList().FindIndex(s => s.Label == result);
+
+        NextSpinOptions = new WheelSpinOptions { RiggedSlice = index };
     }
 
     public void SetTheSpinningMode(string mode)
@@ -24,9 +28,13 @@ public abstract class SpinningDsl
         var wheel = GetWheel();
 
         var useCase = new WheelSpinningUseCase();
-        var result = useCase.SpinTheWheel(wheel);
+        var result = useCase.SpinTheWheel(wheel, NextSpinOptions);
 
-        SpinHistory.Add(result);
+        if (result.Status == FeatureResultStatus.Error)
+            LastErrorMessage = result.Exception!.Message;
+
+        if (result.Data != null)
+            SpinHistory.Add(result.Data);
     }
 
     public void AssertThatWheelLandedOn(string[] expected)
@@ -54,5 +62,10 @@ public abstract class SpinningDsl
             .Select(s => s.GetLandedLabel());
 
         foreach (var name in lastResults) Assert.That(expected, Has.Member(name));
+    }
+
+    public void AssertThatWheelSpinErroredWith(string errorMessage)
+    {
+        Assert.That(LastErrorMessage, Contains.Substring(errorMessage));
     }
 }
