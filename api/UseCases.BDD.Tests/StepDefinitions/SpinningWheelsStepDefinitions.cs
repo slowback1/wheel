@@ -20,10 +20,10 @@ public class SpinningWheelsStepDefinitions
         Feature.SpinTheWheel();
     }
 
-    [Then(@"The wheel should land on ""(.*)"" or ""(.*)"" or ""(.*)""")]
-    public void ThenTheWheelShouldLandOnOrOr(string first, string second, string third)
+    [Then(@"The wheel should land on one of the slices")]
+    public void ThenTheWheelShouldLandOnOrOr()
     {
-        Feature.AssertThatWheelLandedOn(new[] { first, second, third });
+        Feature.AssertThatWheelLandedOn(new[] { "Red", "Green", "Blue" });
     }
 
     [Then(@"The wheel should land on ""(.*)""")]

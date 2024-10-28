@@ -1,11 +1,9 @@
 ﻿Feature: Spin wheels to determine a random result
 
-    @ignore
-    @not-implemented
     Scenario: User spins a wheel
         Given I have a wheel with "Red", "Green", "Blue"
         When I spin the wheel
-        Then The wheel should land on "Red" or "Green" or "Blue"
+        Then The wheel should land on one of the slices
 
     @ignore
     @not-implemented
@@ -15,8 +13,6 @@
         When I spin the wheel
         Then The wheel should land on "Red"
 
-    @ignore
-    @not-implemented
     Scenario: User spins a wheel multiple times
         Given I have a wheel with "Red", "Green", "Blue"
         When I spin the wheel "10" times
