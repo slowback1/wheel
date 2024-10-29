@@ -8,6 +8,7 @@ public abstract class SpinningDsl
     private List<SpinResult> SpinHistory { get; } = new();
     private string? LastErrorMessage { get; set; }
     private WheelSpinOptions? NextSpinOptions { get; set; }
+    private WheelSpinningUseCase UseCase { get; } = new();
 
     protected abstract WheelSetting GetWheel();
 
@@ -15,20 +16,35 @@ public abstract class SpinningDsl
     {
         var index = GetWheel().Slices.ToList().FindIndex(s => s.Label == result);
 
-        NextSpinOptions = new WheelSpinOptions { RiggedSlice = index };
+        NextSpinOptions = new WheelSpinOptions { RiggedSlice = index, Mode = WheelSpinMode.Rigged };
     }
 
     public void SetTheSpinningMode(string mode)
     {
-        Assert.Fail("Not Implemented");
+        NextSpinOptions = new WheelSpinOptions { Mode = GetMode(mode) };
+    }
+
+    private WheelSpinMode GetMode(string mode)
+    {
+        return mode switch
+        {
+            "random" => WheelSpinMode.Random,
+            "rigged" => WheelSpinMode.Rigged,
+            "distribution" => WheelSpinMode.Distribution,
+            _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
+        };
     }
 
     public void SpinTheWheel(int times = 1)
     {
+        for (var i = 0; i < times; i++) Spin();
+    }
+
+    private void Spin()
+    {
         var wheel = GetWheel();
 
-        var useCase = new WheelSpinningUseCase();
-        var result = useCase.SpinTheWheel(wheel, NextSpinOptions);
+        var result = UseCase.SpinTheWheel(wheel, NextSpinOptions);
 
         if (result.Status == FeatureResultStatus.Error)
             LastErrorMessage = result.Exception!.Message;
@@ -58,7 +74,7 @@ public abstract class SpinningDsl
 
     public void AssertThatWheelLandedOn(string[] expected, int times)
     {
-        var lastResults = SpinHistory.OrderByDescending(s => s).Take(times)
+        var lastResults = SpinHistory.OrderByDescending(s => s.GetLandedLabel()).Take(times)
             .Select(s => s.GetLandedLabel());
 
         foreach (var name in lastResults) Assert.That(expected, Has.Member(name));

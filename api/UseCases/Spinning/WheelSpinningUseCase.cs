@@ -7,6 +7,14 @@ namespace UseCases.Spinning;
 public struct WheelSpinOptions
 {
     public int? RiggedSlice { get; set; }
+    public WheelSpinMode Mode { get; set; }
+}
+
+public enum WheelSpinMode
+{
+    Random,
+    Rigged,
+    Distribution
 }
 
 public class WheelSpinningUseCase
@@ -18,13 +26,9 @@ public class WheelSpinningUseCase
 
         var normalizedOptions = NormalizeOptions(options);
 
-        if (normalizedOptions.RiggedSlice.HasValue)
-            return FeatureResult<SpinResult>.Ok(RiggedResult(normalizedOptions.RiggedSlice.Value, wheel));
+        var spinner = WheelSpinnerFactory.Create(normalizedOptions);
 
-        var result = new SpinResult();
-        result.WheelUsed = wheel;
-        result.SliceLanded = new Random().Next(0, wheel.Slices.Count());
-        return FeatureResult<SpinResult>.Ok(result);
+        return FeatureResult<SpinResult>.Ok(spinner.Spin(wheel));
     }
 
     private bool WheelHasSlices(WheelSetting wheel)
@@ -48,6 +52,12 @@ public class WheelSpinningUseCase
 
     private WheelSpinOptions NormalizeOptions(WheelSpinOptions? options)
     {
-        return options ?? new WheelSpinOptions();
+        var normalizedOptions = options ?? new WheelSpinOptions();
+
+        if (normalizedOptions.Mode == null)
+            normalizedOptions.Mode = WheelSpinMode.Random;
+
+
+        return normalizedOptions;
     }
 }

@@ -25,7 +25,7 @@
     @not-implemented
     Scenario: User spins a wheel multiple times in "distribution" mode
         Given I have a wheel with "Red", "Green", "Blue"
-        When I spin the wheel 30 times in "equal distribution" mode
+        When I spin the wheel 30 times in "distribution" mode
         Then The wheel should land on "Red" or "Green" or "Blue" "10" times each
 
     @ignore
