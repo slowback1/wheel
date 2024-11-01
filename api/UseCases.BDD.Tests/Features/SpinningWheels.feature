@@ -23,6 +23,13 @@
 
     @ignore
     @not-implemented
+    Scenario: User can view a history of spins
+        Given I have a wheel with "Red", "Green", "Blue"
+        When I spin the wheel "10" times
+        Then I should be able to view the history of spins
+
+    @ignore
+    @not-implemented
     Scenario: User spins a wheel multiple times in "distribution" mode
         Given I have a wheel with "Red", "Green", "Blue"
         When I spin the wheel 30 times in "distribution" mode
