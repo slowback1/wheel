@@ -24,7 +24,7 @@ public class InMemoryWheelRetrieverTests
             }
         };
 
-        InMemoryWheelStore.Wheels.Add(_wheelSetting);
+        InMemoryStore.Wheels.Add(_wheelSetting);
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class InMemoryWheelRetrieverTests
     {
         var wheels = await _inMemoryWheelRetriever.GetWheelSettings();
 
-        Assert.That(wheels, Is.EquivalentTo(InMemoryWheelStore.Wheels));
+        Assert.That(wheels, Is.EquivalentTo(InMemoryStore.Wheels));
     }
 
     [Test]

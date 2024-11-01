@@ -8,7 +8,7 @@ public class InMemoryWheelCreatorTests
     [SetUp]
     public void ClearInMemoryStore()
     {
-        InMemoryWheelStore.Wheels.Clear();
+        InMemoryStore.Wheels.Clear();
     }
 
     [Test]
@@ -31,7 +31,7 @@ public class InMemoryWheelCreatorTests
         var setting = TestWheelSettings.GetTestWheelSetting();
         await creator.CreateWheelSetting(setting);
 
-        var stored = InMemoryWheelStore.Wheels.First();
+        var stored = InMemoryStore.Wheels.First();
 
         Assert.That(stored.Name, Is.EqualTo(setting.Name));
         Assert.That(stored.Slices.Count(), Is.EqualTo(1));

@@ -13,13 +13,13 @@ public class InMemoryWheelCreator : IWheelCreator
             return SaveResult<WheelSetting>.Failure(
                 $"A wheel with that name '{wheelSetting.Name}' already exists.");
 
-        InMemoryWheelStore.Wheels.Add(wheelSetting);
+        InMemoryStore.Wheels.Add(wheelSetting);
 
         return await Task.FromResult(SaveResult<WheelSetting>.Success(wheelSetting));
     }
 
     private bool SettingExists(string name)
     {
-        return InMemoryWheelStore.Wheels.Any(w => w.Name == name);
+        return InMemoryStore.Wheels.Any(w => w.Name == name);
     }
 }

@@ -14,7 +14,7 @@ public sealed class WheelCreationStepDefinitions
     [Before]
     public void ClearData()
     {
-        InMemoryWheelStore.Wheels.Clear();
+        InMemoryStore.Wheels.Clear();
     }
 
     [Given("I intend to create a wheel")]
