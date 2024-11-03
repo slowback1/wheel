@@ -37,6 +37,15 @@ public class FeatureResult<T>
             Exception = exception
         };
     }
+
+    public static FeatureResult<T> Error(string message)
+    {
+        return new FeatureResult<T>
+        {
+            Status = FeatureResultStatus.Error,
+            Exception = new Exception(message)
+        };
+    }
 }
 
 public enum FeatureResultStatus
