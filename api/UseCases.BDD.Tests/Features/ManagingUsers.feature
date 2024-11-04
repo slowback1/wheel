@@ -56,6 +56,20 @@
 
     @ignore
     @not-implemented
+    Scenario: Hash received during registration can be used to identify the user
+        Given I want to start storing wheel data between sessions
+        When I register as a new user
+        Then I should receive a hash that can be used to identify me
+
+    @ignore
+    @not-implemented
+    Scenario: Hash received during login can be used to identify the user
+        Given I have registered as a new user
+        When I log in
+        Then I should receive a hash that can be used to identify me
+
+    @ignore
+    @not-implemented
     Scenario: Deleting a user account deletes the user
         Given I have registered as a new user
         When I delete my user account
