@@ -34,8 +34,6 @@
           | Username | Reason          |
           | a        | it is too short |
 
-    @ignore
-    @not-implemented
     Scenario: Registrying as a new user stores the password securely
         Given I want to start storing wheel data between sessions
         When I register as a new user

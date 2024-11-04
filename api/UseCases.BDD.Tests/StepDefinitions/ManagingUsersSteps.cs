@@ -1,5 +1,5 @@
-﻿using Dsl;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
+using UseCases.BDD.Tests.Dsl.Users;
 
 namespace UseCases.BDD.Tests.StepDefinitions;
 
@@ -60,5 +60,11 @@ public class ManagingUsersSteps
     public void ThenIShouldBeNotifiedThatTheUsernameIsInvalidBecause(string message)
     {
         Feature.AssertLastErrorIs(message);
+    }
+
+    [Then(@"My password should be stored securely")]
+    public void ThenMyPasswordShouldBeStoredSecurely()
+    {
+        Feature.AssertPasswordIsStoredSecurely();
     }
 }

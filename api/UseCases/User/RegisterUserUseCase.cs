@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Common.Data;
 using Common.Interfaces;
+using Infrastructure.Cryptography;
+using Infrastructure.Messaging;
 using UseCases.Shared;
 
 namespace UseCases.User;
@@ -17,6 +19,8 @@ public class RegisterUserUseCase : DataAccessorUseCase
         var inputValidation = await ValidateInput(user);
         if (inputValidation != null)
             return inputValidation;
+
+        user.Password = HashPassword(user.Password);
 
         var createdUser = await _dataAccess.UserCreator.CreateUser(user);
 
@@ -82,5 +86,14 @@ public class RegisterUserUseCase : DataAccessorUseCase
                 "Username has an error because it is too short. It must be at least 3 characters long.");
 
         return null;
+    }
+
+    private string HashPassword(string password)
+    {
+        var options = MessageBus.GetLastMessage<HashingOptions>(Messages.HashingOptions);
+
+        var hasher = new Hasher(options);
+
+        return hasher.Hash(password);
     }
 }

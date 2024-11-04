@@ -1,14 +1,21 @@
 ﻿using Common.Data;
 using Common.Interfaces;
 using Data.InMemory;
+using Infrastructure.Cryptography;
+using Infrastructure.Messaging;
 using UseCases.User;
 
-namespace Dsl;
+namespace UseCases.BDD.Tests.Dsl.Users;
 
 public abstract class ManagingUsersDsl
 {
     private const string DefaultUsername = "Username";
     private const string DefaultPassword = "Password!1";
+
+    protected ManagingUsersDsl()
+    {
+        SendHashingOptionsToTheMessageBus();
+    }
 
     private string CurrentLoggedInHash { get; set; } = string.Empty;
     private Exception? LastError { get; set; }
@@ -41,5 +48,27 @@ public abstract class ManagingUsersDsl
     {
         Assert.That(LastError, Is.Not.Null);
         Assert.That(LastError!.Message, Contains.Substring(message));
+    }
+
+    public void AssertPasswordIsStoredSecurely()
+    {
+        var storedUser = InMemoryStore.Users.Find(u => u.Username == DefaultUsername);
+
+        var password = storedUser?.PasswordHash;
+
+        Assert.That(password, Is.Not.Null);
+        Assert.That(password, Is.Not.EqualTo(DefaultPassword));
+    }
+
+    private void SendHashingOptionsToTheMessageBus()
+    {
+        var options = new HashingOptions
+        {
+            HashPrefix = "test-hash",
+            HashSize = 8,
+            SaltSize = 8
+        };
+
+        MessageBus.Publish(Messages.HashingOptions, options);
     }
 }
