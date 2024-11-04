@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using Data.InMemory;
+using TechTalk.SpecFlow;
 using UseCases.BDD.Tests.Dsl.Users;
 
 namespace UseCases.BDD.Tests.StepDefinitions;
@@ -7,6 +8,12 @@ namespace UseCases.BDD.Tests.StepDefinitions;
 public class ManagingUsersSteps
 {
     private ManagingUsersDsl Feature { get; set; }
+
+    [Before]
+    public void Before()
+    {
+        InMemoryStore.Users.Clear();
+    }
 
     [Given(@"I want to start storing wheel data between sessions")]
     public void GivenIWantToStartStoringWheelDataBetweenSessions()
@@ -66,5 +73,35 @@ public class ManagingUsersSteps
     public void ThenMyPasswordShouldBeStoredSecurely()
     {
         Feature.AssertPasswordIsStoredSecurely();
+    }
+
+    [Given(@"I have registered as a new user")]
+    public async Task GivenIHaveRegisteredAsANewUser()
+    {
+        Feature = await ManagingUserAlreadyRegisteredDsl.Create();
+    }
+
+    [When(@"I log in")]
+    public async Task WhenILogIn()
+    {
+        await Feature.Login();
+    }
+
+    [When(@"I try to log in with an invalid username")]
+    public async Task WhenITryToLogInWithAnInvalidUsername()
+    {
+        await Feature.Login("not my username");
+    }
+
+    [Then(@"I should be notified that the username or password is invalid")]
+    public void ThenIShouldBeNotifiedThatTheUsernameOrPasswordIsInvalid()
+    {
+        Feature.AssertLastErrorIs("Invalid username or password");
+    }
+
+    [When(@"I try to log in with an invalid password")]
+    public async Task WhenITryToLogInWithAnInvalidPassword()
+    {
+        await Feature.Login(password: "not my password");
     }
 }

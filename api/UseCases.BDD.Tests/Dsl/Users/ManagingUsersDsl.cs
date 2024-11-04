@@ -60,6 +60,18 @@ public abstract class ManagingUsersDsl
         Assert.That(password, Is.Not.EqualTo(DefaultPassword));
     }
 
+    public async Task Login(string username = DefaultUsername, string password = DefaultPassword)
+    {
+        var useCase = new LoginUseCase(DataAccess);
+
+        var result = await useCase.Login(username, password);
+
+        if (result.Status == FeatureResultStatus.Ok)
+            CurrentLoggedInHash = result.Data!;
+        if (result.Status == FeatureResultStatus.Error)
+            LastError = result.Exception;
+    }
+
     private void SendHashingOptionsToTheMessageBus()
     {
         var options = new HashingOptions

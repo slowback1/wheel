@@ -39,22 +39,16 @@
         When I register as a new user
         Then My password should be stored securely
 
-    @ignore
-    @not-implemented
     Scenario: User logs in
         Given I have registered as a new user
         When I log in
         Then I should be able to access my own wheels
 
-    @ignore
-    @not-implemented
     Scenario: Trying to log in with an invalid username
         Given I have registered as a new user
         When I try to log in with an invalid username
         Then I should be notified that the username or password is invalid
 
-    @ignore
-    @not-implemented
     Scenario: Trying to log in with an invalid password
         Given I have registered as a new user
         When I try to log in with an invalid password
