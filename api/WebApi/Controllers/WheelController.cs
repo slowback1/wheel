@@ -24,7 +24,7 @@ public class WheelController : ControllerBase
     {
         var useCase = new GetWheelSettingsUseCase(_dataAccess);
 
-        var result = await useCase.GetWheelSettings("");
+        var result = await useCase.GetWheelSettings(UserToken);
         return ToActionResult(result);
     }
 
@@ -34,7 +34,7 @@ public class WheelController : ControllerBase
     {
         var useCase = new CreateWheelSettingUseCase(_dataAccess);
 
-        var result = await useCase.CreateWheelSetting(wheelSetting, "");
+        var result = await useCase.CreateWheelSetting(wheelSetting, UserToken);
         return ToActionResult(result);
     }
 }
