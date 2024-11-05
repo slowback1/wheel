@@ -23,7 +23,7 @@ public abstract class ManagingUsersDsl
         SendTokenifierOptionsToTheMessageBus();
     }
 
-    private string CurrentLoggedInHash { get; set; } = string.Empty;
+    public string CurrentLoggedInHash { get; set; } = string.Empty;
     private Exception? LastError { get; set; }
     protected IDataAccess DataAccess { get; set; } = new InMemoryDataAccess();
 

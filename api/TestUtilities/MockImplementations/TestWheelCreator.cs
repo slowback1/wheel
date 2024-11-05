@@ -9,7 +9,7 @@ public class TestWheelCreator : IWheelCreator
     public static readonly string NameThatErrors = "Error";
     public static WheelSetting? LastCreatedWheelSetting { get; private set; }
 
-    public async Task<SaveResult<WheelSetting>> CreateWheelSetting(WheelSetting wheelSetting)
+    public async Task<SaveResult<WheelSetting>> CreateWheelSetting(CreateWheelSetting wheelSetting)
     {
         if (wheelSetting.Name == NameThatFails) return SaveResult<WheelSetting>.Failure("Failed to create wheel");
         if (wheelSetting.Name == NameThatErrors) throw new Exception("Error");

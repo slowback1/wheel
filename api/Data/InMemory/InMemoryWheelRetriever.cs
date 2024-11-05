@@ -10,11 +10,13 @@ public class InMemoryWheelRetriever : IWheelRetriever
 {
     public async Task<WheelSetting?> GetWheelSetting(string wheelId)
     {
-        return InMemoryStore.Wheels.FirstOrDefault(wheel => wheel.Name == wheelId);
+        var allWheels = InMemoryStore.Wheels.SelectMany(wheel => wheel.Value);
+
+        return allWheels.FirstOrDefault(wheel => wheel.Name == wheelId);
     }
 
-    public async Task<IEnumerable<WheelSetting>> GetWheelSettings()
+    public async Task<IEnumerable<WheelSetting>> GetWheelSettings(string username)
     {
-        return InMemoryStore.Wheels;
+        return InMemoryStore.Wheels[username] ?? new List<WheelSetting>();
     }
 }

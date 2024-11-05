@@ -1,6 +1,7 @@
 ﻿using Common.Data;
 using Common.Interfaces;
 using TestUtilities.MockImplementations;
+using UseCases.BDD.Tests.Dsl.Users;
 using UseCases.Wheel;
 
 namespace UseCases.BDD.Tests.Dsl;
@@ -12,13 +13,22 @@ public abstract class WheelDsl
         CreateWheelSettingUseCase = new CreateWheelSettingUseCase(dataAccess);
         GetWheelSettingUseCase = new GetWheelSettingUseCase(dataAccess);
         GetWheelSettingsUseCase = new GetWheelSettingsUseCase(dataAccess);
+        ManagingUsersDsl = new ManagingUsersNotCreatedYetDsl();
 
+        CreateUsers().Wait();
         SetupData().Wait();
     }
+
+    public ManagingUsersDsl ManagingUsersDsl { get; set; }
 
     public string FirstWheelName { get; set; } = "Test Wheel";
     public string SecondWheelName { get; set; } = "Test Wheel 2";
     public string NonExistantWheelName { get; set; } = "Non Existant Wheel";
+    public string Username { get; set; } = "test";
+    public string OtherUsername { get; set; } = "other";
+
+    public string FirstLoggedInUserToken { get; set; }
+    public string SecondLoggedInUserHash { get; set; }
 
     public FeatureResult<WheelSetting>? LastLoadedWheel { get; set; }
     public FeatureResult<WheelSetting>? LastCreatedWheel { get; set; }
@@ -28,18 +38,27 @@ public abstract class WheelDsl
     protected GetWheelSettingUseCase GetWheelSettingUseCase { get; set; }
     protected GetWheelSettingsUseCase GetWheelSettingsUseCase { get; set; }
 
+    private async Task CreateUsers()
+    {
+        await ManagingUsersDsl.Register(Username, "test!123ACd");
+        FirstLoggedInUserToken = ManagingUsersDsl.CurrentLoggedInHash;
+        await ManagingUsersDsl.Register(OtherUsername, "test!123ABd");
+        SecondLoggedInUserHash = ManagingUsersDsl.CurrentLoggedInHash;
+    }
+
     protected abstract Task SetupData();
 
-    public async Task<WheelSetting> CreateWheel(string name)
+    public async Task<WheelSetting> CreateWheel(string name, string? userHash = null)
     {
-        var wheel = new WheelSetting
+        var tokenToUse = userHash ?? FirstLoggedInUserToken;
+
+        var wheel = new CreateWheelSetting
         {
             Name = name,
-
             Slices = new[] { new WheelSlice { Label = "Label", Size = 1 } }
         };
 
-        var result = await CreateWheelSettingUseCase.CreateWheelSetting(wheel);
+        var result = await CreateWheelSettingUseCase.CreateWheelSetting(wheel, tokenToUse);
 
         LastCreatedWheel = result;
 
@@ -69,7 +88,7 @@ public abstract class WheelDsl
 
     public async Task AssertThereIsAnyWheelData()
     {
-        var wheels = await GetWheelSettingsUseCase.GetWheelSettings();
+        var wheels = await GetWheelSettingsUseCase.GetWheelSettings(FirstLoggedInUserToken);
         Assert.That(wheels.Data, Is.Not.Null);
         Assert.That(wheels.Data.Count(), Is.GreaterThan(0));
     }
@@ -79,8 +98,19 @@ public abstract class WheelDsl
         LastLoadedWheel = await GetWheel(name);
     }
 
-    public async Task LoadWheels()
+    public async Task LoadWheels(string? token = null)
     {
-        LastLoadedWheels = await GetWheelSettingsUseCase.GetWheelSettings();
+        var tokenToUse = token ?? FirstLoggedInUserToken;
+
+        LastLoadedWheels = await GetWheelSettingsUseCase.GetWheelSettings(tokenToUse);
+    }
+
+    public void AssertWheelDoesNotExist(string name)
+    {
+        var wheels = LastLoadedWheels!.Data;
+
+        var wheel = wheels.FirstOrDefault(w => w.Name == name);
+
+        Assert.That(wheel, Is.Null);
     }
 }

@@ -18,7 +18,7 @@ public class TestWheelRetriever : IWheelRetriever
         return TestWheelSettings.GetTestWheelSetting();
     }
 
-    public async Task<IEnumerable<WheelSetting>> GetWheelSettings()
+    public async Task<IEnumerable<WheelSetting>> GetWheelSettings(string username)
     {
         if (ShouldThrowWhenGettingSettings) throw new Exception("Error");
         return new List<WheelSetting>

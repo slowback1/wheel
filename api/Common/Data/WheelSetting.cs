@@ -8,6 +8,11 @@ public class WheelSetting
     public IEnumerable<WheelSlice> Slices { get; set; }
 }
 
+public class CreateWheelSetting : WheelSetting
+{
+    public string Username { get; set; }
+}
+
 public class WheelSlice
 {
     public string Label { get; set; }

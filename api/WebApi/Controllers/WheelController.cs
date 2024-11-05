@@ -24,17 +24,17 @@ public class WheelController : ControllerBase
     {
         var useCase = new GetWheelSettingsUseCase(_dataAccess);
 
-        var result = await useCase.GetWheelSettings();
+        var result = await useCase.GetWheelSettings("");
         return ToActionResult(result);
     }
 
     [Route("")]
     [HttpPost]
-    public async Task<ActionResult> CreateWheel([FromBody] WheelSetting wheelSetting)
+    public async Task<ActionResult> CreateWheel([FromBody] CreateWheelSetting wheelSetting)
     {
         var useCase = new CreateWheelSettingUseCase(_dataAccess);
 
-        var result = await useCase.CreateWheelSetting(wheelSetting);
+        var result = await useCase.CreateWheelSetting(wheelSetting, "");
         return ToActionResult(result);
     }
 }

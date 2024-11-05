@@ -4,12 +4,13 @@ namespace TestUtilities.TestData;
 
 public static class TestWheelSettings
 {
-    public static WheelSetting GetTestWheelSetting()
+    public static CreateWheelSetting GetTestWheelSetting()
     {
-        return new WheelSetting
+        return new CreateWheelSetting
         {
             Name = "Name",
-            Slices = new[] { GetTestWheelSlice() }
+            Slices = new[] { GetTestWheelSlice() },
+            Username = "test"
         };
     }
 

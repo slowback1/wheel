@@ -145,4 +145,23 @@ public sealed class WheelCreationStepDefinitions
         Assert.That(lastMessage, Is.Not.Null);
         Assert.That(lastMessage!.Name, Is.EqualTo(Feature.FirstWheelName));
     }
+
+    [Given(@"I have an account and have created a wheel")]
+    public void GivenIHaveAnAccountAndHaveCreatedAWheel()
+    {
+        Feature = new WheelDslOneWheel(new InMemoryDataAccess());
+    }
+
+    [Given(@"another user has created a wheel")]
+    public async Task GivenAnotherUserHasCreatedAWheel()
+    {
+        await Feature.CreateWheel("Other person's wheel", Feature.SecondLoggedInUserHash);
+    }
+
+    [Then(@"I should only see the wheel I created")]
+    public async Task ThenIShouldOnlySeeTheWheelICreated()
+    {
+        await Feature.LoadWheels();
+        Feature.AssertWheelDoesNotExist("Other person's wheel");
+    }
 }

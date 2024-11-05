@@ -6,6 +6,6 @@ namespace Data.InMemory;
 
 internal static class InMemoryStore
 {
-    public static readonly List<WheelSetting> Wheels = new();
+    public static readonly Dictionary<string, List<WheelSetting>> Wheels = new();
     public static readonly List<InMemoryUser> Users = new();
 }

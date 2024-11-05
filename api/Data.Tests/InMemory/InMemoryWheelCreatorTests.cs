@@ -31,7 +31,7 @@ public class InMemoryWheelCreatorTests
         var setting = TestWheelSettings.GetTestWheelSetting();
         await creator.CreateWheelSetting(setting);
 
-        var stored = InMemoryStore.Wheels.First();
+        var stored = InMemoryStore.Wheels.First().Value.First();
 
         Assert.That(stored.Name, Is.EqualTo(setting.Name));
         Assert.That(stored.Slices.Count(), Is.EqualTo(1));

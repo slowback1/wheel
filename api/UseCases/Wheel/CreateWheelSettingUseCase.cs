@@ -13,14 +13,23 @@ public class CreateWheelSettingUseCase : DataAccessorUseCase
     {
     }
 
-    public async Task<FeatureResult<WheelSetting>> CreateWheelSetting(WheelSetting settingToCreate)
+    public async Task<FeatureResult<WheelSetting>> CreateWheelSetting(WheelSetting settingToCreate, string userToken)
     {
-        return await Execute(() => Create(settingToCreate));
+        return await Execute(() => Create(settingToCreate, userToken));
     }
 
-    private async Task<FeatureResult<WheelSetting>> Create(WheelSetting settingToCreate)
+    private async Task<FeatureResult<WheelSetting>> Create(WheelSetting settingToCreate, string userToken)
     {
-        var result = await _dataAccess.WheelCreator.CreateWheelSetting(settingToCreate);
+        var username = TokenUtils.GetUserFromToken(userToken);
+
+        var setting = new CreateWheelSetting
+        {
+            Name = settingToCreate.Name,
+            Slices = settingToCreate.Slices,
+            Username = username
+        };
+
+        var result = await _dataAccess.WheelCreator.CreateWheelSetting(setting);
 
         if (!result.SaveSuccessful) return FeatureResult<WheelSetting>.Error(new Exception(result.ErrorMessage));
 

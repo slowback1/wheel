@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Data;
 using Common.Interfaces;
@@ -12,14 +13,18 @@ public class GetWheelSettingsUseCase : DataAccessorUseCase
     {
     }
 
-    public async Task<FeatureResult<IEnumerable<WheelSetting>>> GetWheelSettings()
+    public async Task<FeatureResult<IEnumerable<WheelSetting>>> GetWheelSettings(string userToken)
     {
-        return await Execute(GetSettings);
+        return await Execute(() => GetSettings(userToken));
     }
 
-    private async Task<FeatureResult<IEnumerable<WheelSetting>>> GetSettings()
+    private async Task<FeatureResult<IEnumerable<WheelSetting>>> GetSettings(string userToken)
     {
-        var settings = await _dataAccess.WheelRetriever.GetWheelSettings();
+        var username = TokenUtils.GetUserFromToken(userToken);
+
+        if (username is null) return FeatureResult<IEnumerable<WheelSetting>>.Error(new Exception("Invalid token"));
+
+        var settings = await _dataAccess.WheelRetriever.GetWheelSettings(username);
 
         return FeatureResult<IEnumerable<WheelSetting>>.Ok(settings);
     }

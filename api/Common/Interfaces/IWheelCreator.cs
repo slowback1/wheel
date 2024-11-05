@@ -5,5 +5,5 @@ namespace Common.Interfaces;
 
 public interface IWheelCreator
 {
-    Task<SaveResult<WheelSetting>> CreateWheelSetting(WheelSetting wheelSetting);
+    Task<SaveResult<WheelSetting>> CreateWheelSetting(CreateWheelSetting wheelSetting);
 }

@@ -76,9 +76,7 @@
         Given I have created a wheel
         When I try to delete a wheel but the system fails to save
         Then I should be notified that the system failed to save the wheel
-    
-    @ignore
-    @not-implemented
+
     Scenario: User can only view their own wheels
         Given I have an account and have created a wheel
         And another user has created a wheel

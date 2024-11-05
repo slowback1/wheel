@@ -11,7 +11,7 @@ public class InMemoryWheelRetrieverTests
     [SetUp]
     public void AddAWheelItem()
     {
-        _wheelSetting = new WheelSetting
+        _wheelSetting = new CreateWheelSetting
         {
             Name = "Test Wheel",
             Slices = new[]
@@ -21,18 +21,22 @@ public class InMemoryWheelRetrieverTests
                     Label = "Test Slice",
                     Size = 1
                 }
-            }
+            },
+            Username = "test"
         };
 
-        InMemoryStore.Wheels.Add(_wheelSetting);
+        InMemoryStore.Wheels.Clear();
+        InMemoryStore.Wheels.Add("test", new List<WheelSetting>());
+
+        InMemoryStore.Wheels["test"].Add(_wheelSetting);
     }
 
     [Test]
     public async Task ReturnsTheWheelSettingsWhenGettingAllWheelSettings()
     {
-        var wheels = await _inMemoryWheelRetriever.GetWheelSettings();
+        var wheels = await _inMemoryWheelRetriever.GetWheelSettings("test");
 
-        Assert.That(wheels, Is.EquivalentTo(InMemoryStore.Wheels));
+        Assert.That(wheels, Is.EquivalentTo(InMemoryStore.Wheels["test"]));
     }
 
     [Test]

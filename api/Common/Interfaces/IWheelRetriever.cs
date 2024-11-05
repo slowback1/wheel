@@ -7,5 +7,5 @@ namespace Common.Interfaces;
 public interface IWheelRetriever
 {
     Task<WheelSetting?> GetWheelSetting(string wheelId);
-    Task<IEnumerable<WheelSetting>> GetWheelSettings();
+    Task<IEnumerable<WheelSetting>> GetWheelSettings(string username);
 }
