@@ -20,11 +20,13 @@ public class LoginUseCase : DataAccessorUseCase
         if (user is null)
             return FeatureResult<string>.Error(InvalidUsernameOrPassword);
         var storedHash = await _dataAccess.UserRetriever.GetPasswordHash(username);
-        var passwordMatches = PasswordUtils.VerifyPassword(password, storedHash!);
+        var passwordMatches = UserUtils.VerifyPassword(password, storedHash!);
 
         if (!passwordMatches)
             return FeatureResult<string>.Error(InvalidUsernameOrPassword);
 
-        return FeatureResult<string>.Ok("hash");
+        var token = UserUtils.GenerateJWT(username);
+
+        return FeatureResult<string>.Ok(token);
     }
 }

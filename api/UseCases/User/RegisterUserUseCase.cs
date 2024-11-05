@@ -18,11 +18,13 @@ public class RegisterUserUseCase : DataAccessorUseCase
         if (inputValidation != null)
             return inputValidation;
 
-        user.Password = PasswordUtils.HashPassword(user.Password);
+        user.Password = UserUtils.HashPassword(user.Password);
 
         var createdUser = await _dataAccess.UserCreator.CreateUser(user);
 
-        return FeatureResult<string>.Ok("hash");
+        var token = UserUtils.GenerateJWT(user.Username);
+
+        return FeatureResult<string>.Ok(token);
     }
 
     private async Task<FeatureResult<string>?> ValidateInput(CreateUser user)

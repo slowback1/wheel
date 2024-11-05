@@ -3,7 +3,7 @@ using Infrastructure.Messaging;
 
 namespace UseCases.User;
 
-internal static class PasswordUtils
+internal static class UserUtils
 {
     public static string HashPassword(string password)
     {
@@ -17,6 +17,22 @@ internal static class PasswordUtils
         var hasher = GetHasher();
 
         return hasher.Verify(password, hashedPassword);
+    }
+
+    public static string GenerateJWT(string username)
+    {
+        var tokenifier = GetTokenifier();
+
+        return tokenifier.GenerateToken(username);
+    }
+
+    private static Tokenifier GetTokenifier()
+    {
+        var options = MessageBus.GetLastMessage<TokenifierOptions>(Messages.TokenifierOptions);
+
+        var tokenifier = new Tokenifier(options);
+
+        return tokenifier;
     }
 
     private static Hasher GetHasher()

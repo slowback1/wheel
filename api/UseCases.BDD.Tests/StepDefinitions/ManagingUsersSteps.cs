@@ -104,4 +104,10 @@ public class ManagingUsersSteps
     {
         await Feature.Login(password: "not my password");
     }
+
+    [Then(@"I should receive a hash that can be used to identify me")]
+    public void ThenIShouldReceiveAHashThatCanBeUsedToIdentifyMe()
+    {
+        Feature.AssertHashIdentifiesUser();
+    }
 }

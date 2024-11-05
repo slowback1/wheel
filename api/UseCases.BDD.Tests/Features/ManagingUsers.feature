@@ -54,15 +54,11 @@
         When I try to log in with an invalid password
         Then I should be notified that the username or password is invalid
 
-    @ignore
-    @not-implemented
     Scenario: Hash received during registration can be used to identify the user
         Given I want to start storing wheel data between sessions
         When I register as a new user
         Then I should receive a hash that can be used to identify me
 
-    @ignore
-    @not-implemented
     Scenario: Hash received during login can be used to identify the user
         Given I have registered as a new user
         When I log in

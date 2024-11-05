@@ -12,9 +12,15 @@ public abstract class ManagingUsersDsl
     private const string DefaultUsername = "Username";
     private const string DefaultPassword = "Password!1";
 
+    private readonly TokenifierOptions _tokenifierOptions = new()
+    {
+        Secret = "super_duper_duper_secret_key_that_should_never_be_shared"
+    };
+
     protected ManagingUsersDsl()
     {
         SendHashingOptionsToTheMessageBus();
+        SendTokenifierOptionsToTheMessageBus();
     }
 
     private string CurrentLoggedInHash { get; set; } = string.Empty;
@@ -60,6 +66,19 @@ public abstract class ManagingUsersDsl
         Assert.That(password, Is.Not.EqualTo(DefaultPassword));
     }
 
+    public void AssertHashIdentifiesUser(string username = DefaultUsername)
+    {
+        var storedHash = CurrentLoggedInHash;
+
+        var tokenifier = new Tokenifier(_tokenifierOptions);
+
+        var claims = tokenifier.GetClaims(storedHash);
+
+        var userId = claims?.FirstOrDefault(c => c.Key == "id").Value;
+
+        Assert.That(userId, Is.EqualTo(username));
+    }
+
     public async Task Login(string username = DefaultUsername, string password = DefaultPassword)
     {
         var useCase = new LoginUseCase(DataAccess);
@@ -82,5 +101,10 @@ public abstract class ManagingUsersDsl
         };
 
         MessageBus.Publish(Messages.HashingOptions, options);
+    }
+
+    private void SendTokenifierOptionsToTheMessageBus()
+    {
+        MessageBus.Publish(Messages.TokenifierOptions, _tokenifierOptions);
     }
 }
