@@ -1,3 +1,4 @@
+using WebApi;
 using WebApi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
+
 var app = builder.Build();
+
+Startup.SendConfigOptionsToMessageBus(app.Configuration);
 
 app.UseCors(configure =>
 {

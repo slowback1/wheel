@@ -41,15 +41,6 @@ public class WheelSpinningUseCase
         return FeatureResult<SpinResult>.Error(new Exception(message));
     }
 
-    private SpinResult RiggedResult(int riggedSlice, WheelSetting wheel)
-    {
-        return new SpinResult
-        {
-            WheelUsed = wheel,
-            SliceLanded = riggedSlice
-        };
-    }
-
     private WheelSpinOptions NormalizeOptions(WheelSpinOptions? options)
     {
         var normalizedOptions = options ?? new WheelSpinOptions();
