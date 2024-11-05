@@ -82,3 +82,13 @@
         And another user has created a wheel
         When I view my wheels
         Then I should only see the wheel I created
+
+    Scenario: User cannot create wheels when they are not logged in
+        Given I am not logged in and I am trying to access stored wheels
+        When I create a wheel
+        Then I should be notified that I need to log in to create a wheel
+
+    Scenario: User cannot view wheels when they are not logged in
+        Given I am not logged in and I am trying to access stored wheels
+        When I view my wheels
+        Then I should be notified that I need to log in to view my wheels

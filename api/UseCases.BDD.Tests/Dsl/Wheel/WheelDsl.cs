@@ -113,4 +113,22 @@ public abstract class WheelDsl
 
         Assert.That(wheel, Is.Null);
     }
+
+    public void AssertCreationErrorMessageIs(string message)
+    {
+        var lastError = LastCreatedWheel?.Exception;
+
+        Assert.That(lastError, Is.Not.Null);
+
+        Assert.That(lastError!.Message, Contains.Substring(message));
+    }
+
+    public void AssertViewErrorMessageIs(string message)
+    {
+        var lastError = LastLoadedWheels?.Exception;
+
+        Assert.That(lastError, Is.Not.Null);
+
+        Assert.That(lastError!.Message, Contains.Substring(message));
+    }
 }

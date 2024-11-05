@@ -20,7 +20,15 @@ public class CreateWheelSettingUseCase : DataAccessorUseCase
 
     private async Task<FeatureResult<WheelSetting>> Create(WheelSetting settingToCreate, string userToken)
     {
-        var username = TokenUtils.GetUserFromToken(userToken);
+        string username;
+        try
+        {
+            username = TokenUtils.GetUserFromToken(userToken) ?? "";
+        }
+        catch (Exception e)
+        {
+            return FeatureResult<WheelSetting>.Error("You must log in to create a wheel setting.");
+        }
 
         var setting = new CreateWheelSetting
         {

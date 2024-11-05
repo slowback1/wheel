@@ -20,7 +20,15 @@ public class GetWheelSettingsUseCase : DataAccessorUseCase
 
     private async Task<FeatureResult<IEnumerable<WheelSetting>>> GetSettings(string userToken)
     {
-        var username = TokenUtils.GetUserFromToken(userToken);
+        string? username;
+        try
+        {
+            username = TokenUtils.GetUserFromToken(userToken);
+        }
+        catch (Exception e)
+        {
+            return FeatureResult<IEnumerable<WheelSetting>>.Error("You must log in to view wheel settings.");
+        }
 
         if (username is null) return FeatureResult<IEnumerable<WheelSetting>>.Error(new Exception("Invalid token"));
 

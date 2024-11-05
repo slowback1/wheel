@@ -164,4 +164,22 @@ public sealed class WheelCreationStepDefinitions
         await Feature.LoadWheels();
         Feature.AssertWheelDoesNotExist("Other person's wheel");
     }
+
+    [Given(@"I am not logged in and I am trying to access stored wheels")]
+    public void GivenIAmNotLoggedInAndIAmTryingToAccessStoredWheels()
+    {
+        Feature = new WheelNotLoggedInDsl(new InMemoryDataAccess());
+    }
+
+    [Then(@"I should be notified that I need to log in to create a wheel")]
+    public void ThenIShouldBeNotifiedThatINeedToLogInToCreateAWheel()
+    {
+        Feature.AssertCreationErrorMessageIs("log in");
+    }
+
+    [Then(@"I should be notified that I need to log in to view my wheels")]
+    public void ThenIShouldBeNotifiedThatINeedToLogInToViewMyWheels()
+    {
+        Feature.AssertViewErrorMessageIs("log in");
+    }
 }
