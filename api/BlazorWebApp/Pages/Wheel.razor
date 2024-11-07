@@ -1,0 +1,24 @@
+﻿@page "/wheel"
+@using Common.Data
+
+<p>Wheel!</p>
+
+<div class="wheel">
+    <div class="wheel__inner">
+        @foreach (var slice in slices)
+        {
+            <div class="wheel__slice" style="background-color: #323232">@slice.Label</div>
+        }
+    </div>
+    <div class="wheel__spin" @onclick="Spin">Spin</div>
+</div>
+
+@code {
+
+    private readonly List<WheelSlice> slices = new();
+
+    private void Spin()
+    {
+    }
+
+}
