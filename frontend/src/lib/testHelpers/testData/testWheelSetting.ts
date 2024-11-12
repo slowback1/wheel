@@ -16,3 +16,15 @@ export function getTestWheelSetting(overrides: Partial<WheelSetting> = {}): Whee
 		...overrides
 	};
 }
+
+export function getNSliceWheel(numberOfSlices: number) {
+	const sliceToClone = getTestWheelSetting().slices[0];
+
+	let slices = [];
+
+	for (let i = 0; i < numberOfSlices; i++) {
+		slices.push({ ...sliceToClone, label: `${sliceToClone.label} ${i}` });
+	}
+
+	return getTestWheelSetting({ slices });
+}
