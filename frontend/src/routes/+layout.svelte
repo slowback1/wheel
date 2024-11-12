@@ -10,6 +10,7 @@
 	import ToastWrapper from '$lib/ui/containers/toast/ToastWrapper.svelte';
 	import FeatureFlagService from '$lib/services/FeatureFlag/FeatureFlagService';
 	import ConfigFeatureFlagProvider from '$lib/services/FeatureFlag/ConfigFeatureFlagProvider';
+	import ApiContext from '$lib/api/apiContext';
 
 	let currentTheme: ColorTheme = ColorTheme.Light;
 
@@ -18,6 +19,7 @@
 		UrlPathProvider.initialize(new RealUrlProvider());
 		ConfigService.initialize();
 		FeatureFlagService.initialize(new ConfigFeatureFlagProvider());
+		ApiContext.initialize();
 
 		MessageBus.subscribe<ColorTheme>(
 			Messages.CurrentTheme,

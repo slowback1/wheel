@@ -8,7 +8,7 @@ export type RequestParameters = RequestInit & { queryParameters?: Record<string,
 
 export default abstract class BaseApi {
 	private readonly middlewares: IRequestMiddleware[] = [];
-	protected constructor() {
+	constructor() {
 		this.addMiddleware(new UrlMiddleware());
 		this.addMiddleware(new HeaderMiddleware());
 		this.addMiddleware(new AuthorizationMiddleware());
