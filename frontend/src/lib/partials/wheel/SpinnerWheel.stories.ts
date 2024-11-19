@@ -1,6 +1,7 @@
 ﻿import type { Meta } from '@storybook/svelte';
 import SpinnerWheel from '$lib/partials/wheel/SpinnerWheel.svelte';
 import { getNSliceWheel, getTestWheelSetting } from '$lib/testHelpers/testData/testWheelSetting';
+import { getRandomNumber } from '$lib/utils/numberUtils';
 
 const meta: Meta = {
 	title: 'Partials/Spinner Wheel',
@@ -46,6 +47,6 @@ export const LandingOnSlice = {
 		slices: getNSliceWheel(5).slices,
 		onSpin: () => {},
 		isSpinning: false,
-		selectedSlice: 3
+		selectedSlice: getRandomNumber(0, 4)
 	}
 };
