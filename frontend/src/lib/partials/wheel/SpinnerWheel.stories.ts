@@ -40,3 +40,12 @@ export const NoSlices = {
 		isSpinning: false
 	}
 };
+
+export const LandingOnSlice = {
+	args: {
+		slices: getNSliceWheel(5).slices,
+		onSpin: () => {},
+		isSpinning: false,
+		selectedSlice: 3
+	}
+};

@@ -8,6 +8,7 @@ import {
 	type PieArcDatum,
 	quantize
 } from 'd3';
+import { getRandomNumber } from '$lib/utils/numberUtils';
 
 interface SpinnerWheelOptions {
 	strokeWidth: number;
@@ -26,6 +27,13 @@ interface SpinnerWheelOptions {
 }
 
 export default class WheelService {
+	private readonly DEGREES_IN_CIRCLE = 360;
+	/**
+	 * The angle offset is used to ensure that the selected angle lines up with the pointer that is rendered on top of the wheel.
+	 * @private
+	 */
+	private readonly ANGLE_OFFSET = -180;
+
 	getWheel(slices: WheelSlice[]): SpinnerWheelOptions | null {
 		if (!slices || slices.length === 0) return null;
 
@@ -81,5 +89,14 @@ export default class WheelService {
 			yVals,
 			percent
 		};
+	}
+
+	getLandedAngle(slices: WheelSlice[], slice: number): number {
+		const degreesPerSlice = this.DEGREES_IN_CIRCLE / slices.length;
+
+		const startAngle = slice * degreesPerSlice;
+		const endAngle = startAngle + degreesPerSlice;
+
+		return getRandomNumber(startAngle, endAngle) + this.ANGLE_OFFSET;
 	}
 }

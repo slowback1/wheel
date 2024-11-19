@@ -4,4 +4,5 @@ export interface SpinnerWheelProps {
 	slices: WheelSlice[];
 	onSpin: () => void;
 	isSpinning: boolean;
+	selectedSlice?: number;
 }
