@@ -1,5 +1,5 @@
 {
-  "baseUrl": "value",
+  "baseUrl": "http://localhost:5089",
   "featureFlags": [
     {
       "name": "DEMO_FEATURE_FLAG",
