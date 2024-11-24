@@ -19,12 +19,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-      with:
-        images: slowback1/wheel-of-slowback-backend
     
     - name: Build and push Docker image
       id: push
@@ -33,4 +27,3 @@ jobs:
         file: api/WebApi/Dockerfile
         push: true
         tags: slowback/wheel-of-slowback-backend:${{ github.run_number }}
-        labels: ${{ steps.meta.outputs.labels }}
