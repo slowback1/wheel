@@ -20,7 +20,7 @@
 	<p data-testid="no-slices-message">Add a slice to spin the wheel</p>
 {:else}
 	<button onclick={onSpin} class="wheel__button">
-		<div class="pointer"></div>
+		<span class="pointer"></span>
 		<svg
 			width={wheel.width}
 			height={wheel.height}
@@ -35,20 +35,19 @@
 		>
 			{#each wheel.wedges as wedge, i}
 				<path
-					fill={wheel.colors[i]}
+					fill={wheel.colors[i].background}
 					d={wheel.arcPath(wedge)}
 					stroke={wheel.stroke}
 					stroke-width={wheel.strokeWidth}
 					data-testid="wheel-slice"
 				/>
 				<g text-anchor="middle" transform="translate({wheel.arcLabel.centroid(wedge)})">
-					<text font-size={wheel.fontSize}>
+					<text
+						fill={wheel.colors[i].text}
+						font-size={wheel.fontSize}
+						transform={`rotate(${service.getTextRotationAngle(slices, i)})`}
+					>
 						<tspan font-weight="bold">{wheel.xVals[i]}</tspan>
-						<tspan x="0" dy="1.1em"
-							>{wheel.percent
-								? `${(wheel.yVals[i] * 100).toFixed(2)}%`
-								: wheel.yVals[i].toLocaleString('en-US')}</tspan
-						>
 					</text>
 				</g>
 			{/each}

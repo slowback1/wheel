@@ -50,3 +50,16 @@ export const LandingOnSlice = {
 		selectedSlice: getRandomNumber(0, 4)
 	}
 };
+
+const slicesWithLongLabels = getNSliceWheel(5).slices.map((slice, index) => {
+	slice.label = `This is a really really really long label that should be truncated ${index}`;
+	return slice;
+});
+
+export const WithReallyLongLabels = {
+	args: {
+		slices: slicesWithLongLabels,
+		isSpinning: false,
+		onSpin: () => {}
+	}
+};
