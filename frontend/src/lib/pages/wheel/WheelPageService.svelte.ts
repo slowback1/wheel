@@ -1,5 +1,7 @@
 ﻿import type ApiContext from '$lib/api/apiContext';
 import type { WheelSetting, WheelSlice } from '$lib/api/types';
+import MessageBus from '$lib/bus/MessageBus';
+import { Messages } from '$lib/bus/Messages';
 
 export default class WheelPageService {
 	wheelSlices: WheelSlice[] = $state([]);
@@ -33,6 +35,9 @@ export default class WheelPageService {
 		await Promise.all(this.spinResultPromises);
 
 		this.isSpinning = false;
+
+		const slice = this.wheelSlices[this.landedSlice];
+		MessageBus.sendMessage(Messages.WheelSpinResult, slice);
 	}
 
 	reset() {

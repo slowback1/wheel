@@ -2,6 +2,8 @@
 import type { WheelSlice } from '$lib/api/types';
 import type ApiContext from '$lib/api/apiContext';
 import { getNSliceWheel } from '$lib/testHelpers/testData/testWheelSetting';
+import MessageBus from '$lib/bus/MessageBus';
+import { Messages } from '$lib/bus/Messages';
 
 describe('WheelPageService', () => {
 	let apiContextMock: ApiContext;
@@ -15,7 +17,7 @@ describe('WheelPageService', () => {
 		} as unknown as ApiContext;
 
 		wheelPageService = new WheelPageService(apiContextMock);
-		wheelPageService.spinDurationInSections = 1;
+		wheelPageService.spinDurationInSections = 0.25;
 	});
 
 	test('should initialize with default values', () => {
@@ -58,5 +60,19 @@ describe('WheelPageService', () => {
 		await spinPromise;
 
 		expect(wheelPageService.isSpinning).toBe(false);
+	});
+
+	it('should send a message to the message bus indicating that the spin has completed and that the wheel has landed on a slice', async () => {
+		const slices: WheelSlice[] = getNSliceWheel(5).slices;
+		wheelPageService.onWheelSliceChange(slices);
+
+		const spinPromise = wheelPageService.spin();
+
+		await spinPromise;
+
+		let lastMessage = MessageBus.getLastMessage<WheelSlice>(Messages.WheelSpinResult);
+		const expected = slices[2];
+
+		expect(lastMessage).toEqual(expected);
 	});
 });
