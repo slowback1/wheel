@@ -78,3 +78,11 @@
         And I have created a wheel
         When I delete my user account
         Then My wheels should no longer be stored
+
+    @ignore
+    @not-implemented
+    Scenario: User can not delete an account that is not theirs
+        Given I have registered as a new user
+        And another user has registered
+        When I try to delete the other user's account
+        Then I should be notified that I can not delete the other user's account
