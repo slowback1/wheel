@@ -1,4 +1,4 @@
-cd $(git rev-parse --show-toplevel) || exit 1
+cd $(git rev-parse --show-toplevel)/frontend || exit 1
 
 TAG=frontend-tests-runner:latest
 NAME=frontend-test-runner
