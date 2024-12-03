@@ -28,6 +28,6 @@ fi
 TAG="${PROJECT_NAME}:${BUILD_NUMBER}"
 
 docker build -t=${TAG} -f docker/Dockerfile --target=final .
-docker image tag ${TAG} ${REGISTRY}/${TAG}
+docker image tag ${TAG}
 
-docker image push ${REGISTRY}/${TAG}
+docker image push ${TAG}
