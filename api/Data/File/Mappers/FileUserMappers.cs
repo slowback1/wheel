@@ -9,7 +9,8 @@ internal static class FileUserMappers
     {
         return new FileUser
         {
-            Username = createUser.Username
+            Username = createUser.Username,
+            PasswordHash = createUser.Password
         };
     }
 

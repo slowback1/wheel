@@ -10,6 +10,9 @@ public class FileDataAccess : IDataAccess
         var store = new FileStoreRetriever(settings);
 
         WheelCreator = new FileWheelCreator(store);
+        WheelRetriever = new FileWheelRetriever(store);
+        UserCreator = new FileUserCreator(store);
+        UserRetriever = new FileUserRetriever(store);
     }
 
     public IWheelCreator WheelCreator { get; }

@@ -14,7 +14,7 @@ public class FileUserMappersTests
         var result = user.ToFileUser();
 
         Assert.That(result.Username, Is.EqualTo(user.Username));
-        Assert.That(result.PasswordHash, Is.Null);
+        Assert.That(result.PasswordHash, Is.EqualTo(user.Password));
     }
 
     [Test]
