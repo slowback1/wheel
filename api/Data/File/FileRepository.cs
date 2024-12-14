@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Data.File.Models;
 using Data.File.Store;
 
@@ -14,14 +15,14 @@ internal abstract class FileRepository
         Load();
     }
 
-    protected IEnumerable<FileUser> Users { get; set; }
-    protected IEnumerable<FileWheel> Wheels { get; set; }
+    protected List<FileUser> Users { get; set; }
+    protected List<FileWheel> Wheels { get; set; }
 
     protected void Load()
     {
         var fileStore = _retriever.GetFileStore();
-        Users = fileStore.Users;
-        Wheels = fileStore.Wheels;
+        Users = fileStore.Users.ToList();
+        Wheels = fileStore.Wheels.ToList();
     }
 
     protected void SaveChanges()

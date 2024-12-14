@@ -1,16 +1,33 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace Data.File.Store;
 
 internal class FileStoreRetriever : IFileStoreRetriever
 {
+    private readonly FileStorageSettings _settings;
+
+    public FileStoreRetriever(FileStorageSettings settings)
+    {
+        _settings = settings;
+    }
+
     public FileStore GetFileStore()
     {
-        throw new NotImplementedException();
+        var path = _settings.StoragePath;
+
+        var json = System.IO.File.ReadAllText(path);
+
+        var maybeFileStore = JsonConvert.DeserializeObject<FileStore>(json);
+
+        return maybeFileStore ?? new FileStore();
     }
 
     public void SaveFileStore(FileStore fileStore)
     {
-        throw new NotImplementedException();
+        var path = _settings.StoragePath;
+
+        var json = JsonConvert.SerializeObject(fileStore);
+
+        System.IO.File.WriteAllText(path, json);
     }
 }

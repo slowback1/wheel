@@ -24,13 +24,13 @@ internal class TestFileRepository : FileRepository
 
     public void SetUsers(IEnumerable<FileUser> users)
     {
-        Users = users;
+        Users = users.ToList();
         SaveChanges();
     }
 
     public void SetWheels(IEnumerable<FileWheel> wheels)
     {
-        Wheels = wheels;
+        Wheels = wheels.ToList();
         SaveChanges();
     }
 }
