@@ -6,7 +6,7 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Route("Wheel")]
-public class WheelController : ControllerBase
+public class heelController : ControllerBase
 {
     [Route("{wheelId}")]
     [HttpGet]

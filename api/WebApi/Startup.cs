@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Cryptography;
 using Infrastructure.Messaging;
+using WebApi.Config;
 
 namespace WebApi;
 
@@ -24,5 +25,12 @@ public static class Startup
         };
 
         MessageBus.Publish(Messages.TokenifierOptions, tokenOptions);
+    }
+
+    public static void SendStorageOptionsToMessageBus(IConfiguration configuration)
+    {
+        var storage = configuration.GetRequiredSection("Storage").Get<StorageConfig>();
+
+        MessageBus.Publish(Messages.StorageOptions, storage);
     }
 }

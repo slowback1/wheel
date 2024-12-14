@@ -15,6 +15,8 @@ internal class FileStoreRetriever : IFileStoreRetriever
     {
         var path = _settings.StoragePath;
 
+        if (!System.IO.File.Exists(path)) return new FileStore();
+
         var json = System.IO.File.ReadAllText(path);
 
         var maybeFileStore = JsonConvert.DeserializeObject<FileStore>(json);

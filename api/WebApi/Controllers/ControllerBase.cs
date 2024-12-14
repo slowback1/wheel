@@ -1,7 +1,9 @@
 ﻿using Common.Data;
 using Common.Interfaces;
+using Infrastructure.Messaging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WebApi.Config;
 using WebApi.Utils;
 
 namespace WebApi.Controllers;
@@ -12,7 +14,9 @@ public abstract class ControllerBase : Controller
 
     protected ControllerBase()
     {
-        _dataAccess = DataAccessFactory.CreateDataAccess();
+        var options = MessageBus.GetLastMessage<StorageConfig>(Messages.StorageOptions);
+
+        _dataAccess = DataAccessFactory.CreateDataAccess(options);
     }
 
     protected string UserToken { get; set; }

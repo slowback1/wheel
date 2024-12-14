@@ -15,6 +15,7 @@ builder.Services.AddCors();
 var app = builder.Build();
 
 Startup.SendConfigOptionsToMessageBus(app.Configuration);
+Startup.SendStorageOptionsToMessageBus(app.Configuration);
 
 app.UseCors(configure =>
 {
