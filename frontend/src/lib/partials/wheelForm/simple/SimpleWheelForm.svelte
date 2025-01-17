@@ -24,7 +24,7 @@
 	<textarea
 		id="simple-wheel-input"
 		class="simple-wheel-form__input"
-		onchange={handleChange}
+		oninput={handleChange}
 		{value}
 		placeholder="Enter each slice on a new line"
 	></textarea>
