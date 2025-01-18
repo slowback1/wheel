@@ -5,9 +5,13 @@ import MessageBus from '$lib/bus/MessageBus';
 import getLocalStorageMock from '$lib/testHelpers/localStorageMock';
 import type IStorageProvider from '$lib/bus/IStorageProvider';
 import { Messages } from '$lib/bus/Messages';
+import UserApi from '$lib/api/userApi';
 
 describe('ApiContext', () => {
-	it.each([['spinApi', SpinApi]])('has property %s', (property, expectedClass) => {
+	it.each([
+		['spinApi', SpinApi],
+		['userApi', UserApi]
+	])('has property %s', (property, expectedClass) => {
 		const apiContext = new ApiContext();
 		expect(apiContext[property]).toBeInstanceOf(expectedClass);
 	});

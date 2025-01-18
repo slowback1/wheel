@@ -28,3 +28,17 @@ export interface SpinResult {
 	wheelUsed: WheelSetting;
 	sliceLanded: number;
 }
+
+export interface CreateUserRequest {
+	username: string;
+	password: string;
+}
+
+export interface LoginRequest {
+	username: string;
+	password: string;
+}
+
+export interface UserResponse {
+	username: string;
+}
