@@ -5,5 +5,7 @@ export const Messages = {
 	Toasts: 'toasts',
 	FeatureFlagsChanged: 'feature_flags_changed',
 	ApiContext: 'api_context',
-	WheelSpinResult: 'wheel_spin_result'
+	WheelSpinResult: 'wheel_spin_result',
+	UserToken: 'user_token',
+	UserSession: 'user_session'
 };
