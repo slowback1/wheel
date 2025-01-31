@@ -1,0 +1,18 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/User/Register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "TestUser1",
+    "password": "Password1!"
+  }
+}
