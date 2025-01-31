@@ -51,7 +51,7 @@ describe('SimpleWheelForm', () => {
 
 		const newSlices: WheelSlice[] = [{ label: 'new value', size: 1 }];
 
-		fireEvent.change(textarea, { target: { value: newValue } });
+		fireEvent.input(textarea, { target: { value: newValue } });
 
 		expect(onWheelSliceChange).toHaveBeenCalledWith(newSlices);
 	});
@@ -68,7 +68,7 @@ describe('SimpleWheelForm', () => {
 			{ label: 'another value', size: 1 }
 		];
 
-		fireEvent.change(textarea, { target: { value: newValue } });
+		fireEvent.input(textarea, { target: { value: newValue } });
 
 		expect(onWheelSliceChange).toHaveBeenCalledWith(newSlices);
 	});
