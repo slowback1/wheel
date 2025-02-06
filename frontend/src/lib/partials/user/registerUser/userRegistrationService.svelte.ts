@@ -2,17 +2,18 @@ import MessageBus from '$lib/bus/MessageBus';
 import type ApiContext from '$lib/api/apiContext';
 import { Messages } from '$lib/bus/Messages';
 import UserTokenParser from '$lib/partials/user/token/userTokenParser';
+import type { IUserRegistrationService } from '$lib/partials/user/registerUser/RegisterUser.types';
 
-export default class UserRegistrationService {
+export default class UserRegistrationService implements IUserRegistrationService {
 	constructor(private onRegisterSuccessful: () => void) {}
 
-	public username: string = $state('');
-	public password: string = $state('');
-	public error: string = $state('');
-	public showError: boolean = $state(false);
+	username: string = $state('');
+	password: string = $state('');
+	error: string = $state('');
+	showError: boolean = $state(false);
 	private tokenParser = new UserTokenParser();
 
-	public async onRegister() {
+	async onRegister() {
 		this.resetErrorState();
 
 		try {
