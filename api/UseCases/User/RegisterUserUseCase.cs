@@ -12,7 +12,7 @@ public class RegisterUserUseCase : DataAccessorUseCase
     {
     }
 
-    public async Task<FeatureResult<string>> Register(CreateUser user)
+    public async Task<FeatureResult<UserTokenResponse>> Register(CreateUser user)
     {
         var inputValidation = await ValidateInput(user);
         if (inputValidation != null)
@@ -24,10 +24,10 @@ public class RegisterUserUseCase : DataAccessorUseCase
 
         var token = UserUtils.GenerateJWT(user.Username);
 
-        return FeatureResult<string>.Ok(token);
+        return FeatureResult<UserTokenResponse>.Ok(new UserTokenResponse(token));
     }
 
-    private async Task<FeatureResult<string>?> ValidateInput(CreateUser user)
+    private async Task<FeatureResult<UserTokenResponse>?> ValidateInput(CreateUser user)
     {
         var passwordValidation = ValidatePassword(user.Password);
         if (passwordValidation != null)
@@ -40,49 +40,49 @@ public class RegisterUserUseCase : DataAccessorUseCase
         var storedUser = await _dataAccess.UserRetriever.GetUser(user.Username);
 
         if (storedUser != null)
-            return FeatureResult<string>.Error($"User with the name {user.Username} already exists.");
+            return FeatureResult<UserTokenResponse>.Error($"User with the name {user.Username} already exists.");
 
         return null;
     }
 
-    private FeatureResult<string>? ValidatePassword(string password)
+    private FeatureResult<UserTokenResponse>? ValidatePassword(string password)
     {
         if (password.Length < 8)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Password has an error because it is too short. It must be at least 8 characters long.");
 
         var passwordDoesNotHaveAnyLetters = password.All(c => char.IsDigit(c) || char.IsPunctuation(c));
         if (passwordDoesNotHaveAnyLetters)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Password has an error because it does not contain any letters.");
 
         var passwordContainsNumbers = password.Any(char.IsDigit);
         if (!passwordContainsNumbers)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Password has an error because it does not contain any numbers.");
 
         var passwordContainsSpecialCharacters = password.Any(char.IsPunctuation);
         if (!passwordContainsSpecialCharacters)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Password has an error because it does not contain any special characters.");
 
         var passwordContainsUppercase = password.Any(char.IsUpper);
         if (!passwordContainsUppercase)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Password has an error because it does not contain any uppercase characters.");
 
         var passwordContainsLowercase = password.Any(char.IsLower);
         if (!passwordContainsLowercase)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Password has an error because it does not contain any lowercase characters.");
 
         return null;
     }
 
-    private FeatureResult<string>? ValidateUsername(string username)
+    private FeatureResult<UserTokenResponse>? ValidateUsername(string username)
     {
         if (username.Length < 3)
-            return FeatureResult<string>.Error(
+            return FeatureResult<UserTokenResponse>.Error(
                 "Username has an error because it is too short. It must be at least 3 characters long.");
 
         return null;

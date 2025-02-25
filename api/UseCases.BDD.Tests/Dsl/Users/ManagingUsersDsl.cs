@@ -40,7 +40,7 @@ public abstract class ManagingUsersDsl
         var result = await useCase.Register(user);
 
         if (result.Status == FeatureResultStatus.Ok)
-            CurrentLoggedInHash = result.Data!;
+            CurrentLoggedInHash = result.Data!.Token;
         if (result.Status == FeatureResultStatus.Error)
             LastError = result.Exception;
     }
@@ -86,7 +86,7 @@ public abstract class ManagingUsersDsl
         var result = await useCase.Login(username, password);
 
         if (result.Status == FeatureResultStatus.Ok)
-            CurrentLoggedInHash = result.Data!;
+            CurrentLoggedInHash = result.Data!.Token;
         if (result.Status == FeatureResultStatus.Error)
             LastError = result.Exception;
     }
