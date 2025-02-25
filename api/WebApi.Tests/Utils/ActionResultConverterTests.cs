@@ -8,7 +8,7 @@ public class ActionResultConverterTests
 {
     [Test]
     [TestCase(FeatureResultStatus.Ok, typeof(OkObjectResult))]
-    [TestCase(FeatureResultStatus.NotFound, typeof(NotFoundResult))]
+    [TestCase(FeatureResultStatus.NotFound, typeof(NotFoundObjectResult))]
     [TestCase(FeatureResultStatus.Error, typeof(ObjectResult))]
     public void ToActionResultReturnsCorrectType(FeatureResultStatus status, Type expectedType)
     {
