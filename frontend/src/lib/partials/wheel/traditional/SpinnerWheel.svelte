@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
-	import WheelService from '$lib/partials/wheel/WheelService';
-	import type { SpinnerWheelProps } from '$lib/partials/wheel/SpinnerWheel.types';
+	import WheelService from '$lib/partials/wheel/traditional/WheelService';
+	import type { SpinnerWheelProps } from '$lib/partials/wheel/traditional/SpinnerWheel.types';
 
 	const { slices, isSpinning, onSpin, selectedSlice }: SpinnerWheelProps = $props();
 

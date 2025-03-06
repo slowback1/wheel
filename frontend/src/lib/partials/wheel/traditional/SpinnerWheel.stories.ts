@@ -1,5 +1,5 @@
 ﻿import type { Meta } from '@storybook/svelte';
-import SpinnerWheel from '$lib/partials/wheel/SpinnerWheel.svelte';
+import SpinnerWheel from '$lib/partials/wheel/traditional/SpinnerWheel.svelte';
 import { getNSliceWheel, getTestWheelSetting } from '$lib/testHelpers/testData/testWheelSetting';
 import { getRandomNumber } from '$lib/utils/numberUtils';
 

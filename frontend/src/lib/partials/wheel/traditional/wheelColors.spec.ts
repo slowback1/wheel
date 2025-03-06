@@ -1,4 +1,4 @@
-﻿import { getColorOfSlice } from '$lib/partials/wheel/wheelColors';
+﻿import { getColorOfSlice } from '$lib/partials/wheel/traditional/wheelColors';
 
 describe('getColorOfSlice', () => {
 	it.each([

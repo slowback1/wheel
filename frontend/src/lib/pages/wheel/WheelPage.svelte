@@ -3,7 +3,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import MessageBus from '$lib/bus/MessageBus';
 	import { Messages } from '$lib/bus/Messages';
-	import SpinnerWheel from '$lib/partials/wheel/SpinnerWheel.svelte';
+	import SpinnerWheel from '$lib/partials/wheel/traditional/SpinnerWheel.svelte';
 	import WheelForm from '$lib/partials/wheelForm/WheelForm.svelte';
 	import WheelPageAlertService from '$lib/pages/wheel/WheelPageAlertService.svelte';
 	import Alert from '$lib/ui/containers/alert/Alert.svelte';

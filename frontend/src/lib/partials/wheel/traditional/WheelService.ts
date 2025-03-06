@@ -9,7 +9,7 @@ import {
 	quantize
 } from 'd3';
 import { getRandomNumber } from '$lib/utils/numberUtils';
-import { getColorOfSlice, type SliceColor } from '$lib/partials/wheel/wheelColors';
+import { getColorOfSlice, type SliceColor } from '$lib/partials/wheel/traditional/wheelColors';
 
 interface SpinnerWheelOptions {
 	strokeWidth: number;

@@ -1,6 +1,6 @@
 ﻿import { fireEvent, render, type RenderResult } from '@testing-library/svelte';
-import SpinnerWheel from '$lib/partials/wheel/SpinnerWheel.svelte';
-import type { SpinnerWheelProps } from '$lib/partials/wheel/SpinnerWheel.types';
+import SpinnerWheel from '$lib/partials/wheel/traditional/SpinnerWheel.svelte';
+import type { SpinnerWheelProps } from '$lib/partials/wheel/traditional/SpinnerWheel.types';
 import { getNSliceWheel, getTestWheelSetting } from '$lib/testHelpers/testData/testWheelSetting';
 import { beforeEach } from 'vitest';
 

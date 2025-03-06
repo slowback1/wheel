@@ -1,5 +1,5 @@
 ﻿import { getNSliceWheel } from '$lib/testHelpers/testData/testWheelSetting';
-import WheelService from '$lib/partials/wheel/WheelService';
+import WheelService from '$lib/partials/wheel/traditional/WheelService';
 
 describe('WheelService', () => {
 	it.each([
