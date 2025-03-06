@@ -8,6 +8,7 @@
 	<SkipToContentLink />
 
 	<HeaderLink href="/" label="Home" />
+	<HeaderLink href="/user/register" label="Register" />
 	<ThemeToggle />
 </nav>
 

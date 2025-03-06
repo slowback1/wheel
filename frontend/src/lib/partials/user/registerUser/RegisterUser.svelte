@@ -8,9 +8,14 @@
 	const { service }: RegisterUserProps = $props();
 </script>
 
-<form class="register-user" onsubmit={service.onRegister}>
+<form class="register-user" onsubmit={() => service.onRegister()}>
 	{#if service.showError}
-		<Alert type={AlertType.Error} message={service.error} testId="register-user-error" />
+		<Alert
+			type={AlertType.Error}
+			message={service.error}
+			testId="register-user-error"
+			onClose={service.onErrorAlertClose}
+		/>
 	{/if}
 
 	<TextBox id="register-user-username" label="Username" bind:value={service.username} />

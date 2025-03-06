@@ -14,7 +14,7 @@ describe('userRegistrationService', () => {
 	beforeEach(() => {
 		onRegister = vi.fn();
 		testApi = createTestApiContext();
-		testApi.userApi.createUser = vi.fn(() => Promise.resolve('yes'));
+		testApi.userApi.createUser = vi.fn(() => Promise.resolve({ token: 'yes' }));
 
 		registrationService = new UserRegistrationService(onRegister);
 	});
@@ -43,7 +43,7 @@ describe('userRegistrationService', () => {
 	});
 
 	it("should set the error message when the userApi's createUser method rejects", async () => {
-		testApi.userApi.createUser = vi.fn(() => Promise.reject('no'));
+		testApi.userApi.createUser = vi.fn(() => Promise.reject(new Error('no')));
 
 		await registrationService.onRegister();
 
@@ -62,7 +62,7 @@ describe('userRegistrationService', () => {
 		const validToken =
 			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlRlc3RVc2VyMSIsIm5iZiI6MTczODI5MTkxNiwiZXhwIjoxNzM4ODk2NzE2LCJpYXQiOjE3MzgyOTE5MTZ9.Rar4MuSCcS2Kob5xgHIGXKVYWCj0DJ5FPjrn-irm7OQ';
 
-		testApi.userApi.createUser = vi.fn(() => Promise.resolve(validToken));
+		testApi.userApi.createUser = vi.fn(() => Promise.resolve({ token: validToken }));
 
 		await registrationService.onRegister();
 
@@ -86,9 +86,19 @@ describe('userRegistrationService', () => {
 
 		expect(registrationService.showError).toBe(true);
 
-		testApi.userApi.createUser = vi.fn(() => Promise.resolve('yes'));
+		testApi.userApi.createUser = vi.fn(() => Promise.resolve({ token: 'yes' }));
 
 		await registrationService.onRegister();
+
+		expect(registrationService.showError).toBe(false);
+		expect(registrationService.error).toBe('');
+	});
+
+	it('onErrorAlertClose should reset the error state', () => {
+		registrationService.showError = true;
+		registrationService.error = 'Test Error';
+
+		registrationService.onErrorAlertClose();
 
 		expect(registrationService.showError).toBe(false);
 		expect(registrationService.error).toBe('');

@@ -21,7 +21,9 @@
 >
 	{message}
 
-	<button class="alert__close-button" onclick={onClose} data-testid="alert-close">X</button>
+	<button type="button" class="alert__close-button" onclick={onClose} data-testid="alert-close"
+		>X</button
+	>
 </div>
 
 <style>
@@ -57,7 +59,6 @@
 		font-weight: var(--alert-font-weight);
 		background-color: var(--alert-background-color);
 		color: var(--alert-font-color);
-		position: relative;
 	}
 
 	.alert__close-button {
@@ -68,10 +69,7 @@
 		font-size: 1rem;
 		margin-left: 0.5rem;
 		padding: calc(var(--alert-padding-y) - 4px);
-		position: absolute;
-		right: 2rem;
 		/* To offset the border width */
-		top: 2px;
 	}
 
 	.alert__close-button:hover,

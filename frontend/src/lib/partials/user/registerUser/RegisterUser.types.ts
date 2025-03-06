@@ -7,4 +7,5 @@ export interface IUserRegistrationService {
 	error: string;
 	showError: boolean;
 	onRegister(): Promise<void>;
+	onErrorAlertClose(): void;
 }

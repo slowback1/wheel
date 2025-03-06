@@ -23,9 +23,14 @@ export default class UserRegistrationService implements IUserRegistrationService
 		}
 	}
 
+	onErrorAlertClose(): void {
+		this.showError = false;
+		this.error = '';
+	}
+
 	private async handleRegistrationRequest() {
 		let api = MessageBus.getLastMessage<ApiContext>(Messages.ApiContext);
-		let token = await api.userApi.createUser(this.username, this.password);
+		let { token } = await api.userApi.createUser(this.username, this.password);
 		this.handleRegistrationResponse(token);
 	}
 
@@ -36,8 +41,8 @@ export default class UserRegistrationService implements IUserRegistrationService
 		this.onRegisterSuccessful();
 	}
 
-	private handleError(error: string) {
-		this.error = error;
+	private handleError(error: Error) {
+		this.error = error.message;
 		this.showError = true;
 	}
 

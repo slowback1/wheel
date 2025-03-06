@@ -2,6 +2,7 @@
 import { beforeEach } from 'vitest';
 import { fireEvent, render, type RenderResult } from '@testing-library/svelte';
 import RegisterUser from '$lib/partials/user/registerUser/RegisterUser.svelte';
+import AlertUiTestHelpers from '$lib/testHelpers/uiTestHelpers/alertUiTestHelpers';
 
 describe('RegisterUser', () => {
 	let mockUserRegistrationService: IUserRegistrationService;
@@ -14,6 +15,7 @@ describe('RegisterUser', () => {
 			password: '',
 			showError: false,
 			username: '',
+			onErrorAlertClose: vi.fn(),
 			...overrides
 		};
 
@@ -97,5 +99,14 @@ describe('RegisterUser', () => {
 
 	it('should not render the error message when showError is false', () => {
 		expect(result.queryByTestId('register-user-error')).not.toBeInTheDocument();
+	});
+
+	it('clicking the close button on the error message should call onErrorAlertClose', () => {
+		let onErrorAlertClose = vi.fn();
+		renderComponent({ showError: true, error: 'Test Error', onErrorAlertClose });
+
+		AlertUiTestHelpers.closeAlert(result, 'register-user-error');
+
+		expect(onErrorAlertClose).toHaveBeenCalled();
 	});
 });
