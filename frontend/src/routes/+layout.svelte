@@ -11,8 +11,11 @@
 	import FeatureFlagService from '$lib/services/FeatureFlag/FeatureFlagService';
 	import ConfigFeatureFlagProvider from '$lib/services/FeatureFlag/ConfigFeatureFlagProvider';
 	import ApiContext from '$lib/api/apiContext';
+	import UserService from '$lib/services/User/UserService.svelte';
 
-	let currentTheme: ColorTheme = ColorTheme.Light;
+	let currentTheme: ColorTheme = $state(ColorTheme.Light);
+	let userService: UserService = $state();
+	let initialized = $state(false);
 
 	onMount(() => {
 		MessageBus.initialize(getRealStorageProvider());
@@ -21,23 +24,29 @@
 		FeatureFlagService.initialize(new ConfigFeatureFlagProvider());
 		ApiContext.initialize();
 
+		userService = new UserService();
+
 		MessageBus.subscribe<ColorTheme>(
 			Messages.CurrentTheme,
 			(value) => (currentTheme = value ?? ColorTheme.Light)
 		);
+
+		initialized = true;
 	});
 </script>
 
-<div
-	class:light-theme={currentTheme === ColorTheme.Light}
-	class:dark-theme={currentTheme === ColorTheme.Dark}
->
-	<ToastWrapper />
-	<Header />
-	<main id="content" class="main-content">
-		<slot />
-	</main>
-</div>
+{#if initialized}
+	<div
+		class:light-theme={currentTheme === ColorTheme.Light}
+		class:dark-theme={currentTheme === ColorTheme.Dark}
+	>
+		<ToastWrapper />
+		<Header {userService} />
+		<main id="content" class="main-content">
+			<slot />
+		</main>
+	</div>
+{/if}
 
 <style global>
 	@import '../style/reset.css';
