@@ -6,6 +6,12 @@ import UrlEncodingMiddleware from '$lib/api/middleware/UrlEncodingMiddleware';
 
 export type RequestParameters = RequestInit & { queryParameters?: Record<string, string> };
 
+export type ServerErrorResponse = {
+	message: string;
+	code: number;
+};
+const NUMBER_OF_KEYS_IN_ERROR_RESPONSE = 2;
+
 export default abstract class BaseApi {
 	private readonly middlewares: IRequestMiddleware[] = [];
 	constructor() {
@@ -26,7 +32,27 @@ export default abstract class BaseApi {
 
 		let res = await this.runRequest(apiRequest);
 
-		return res.json();
+		let json = await res.json();
+
+		if (this.isErrorResponse(json)) {
+			this.throwErrorResponse(json as ServerErrorResponse);
+		}
+
+		return json;
+	}
+
+	private throwErrorResponse(error: ServerErrorResponse): never {
+		throw new Error(error.message);
+	}
+
+	private isErrorResponse(json: object): boolean {
+		let numberOfKeys = Object.keys(json).length;
+
+		let hasSameNumberOfKeys = numberOfKeys === NUMBER_OF_KEYS_IN_ERROR_RESPONSE;
+		let hasErrorKey = json.hasOwnProperty('message');
+		let hasCodeKey = json.hasOwnProperty('code');
+
+		return hasSameNumberOfKeys && hasErrorKey && hasCodeKey;
 	}
 
 	private async runRequest(request: APIRequest): Promise<Response> {

@@ -1,4 +1,4 @@
-import BaseApi from '$lib/api/baseApi';
+import BaseApi, { type ServerErrorResponse } from '$lib/api/baseApi';
 import { mockApi } from '$lib/testHelpers/getFetchMock';
 import { expect } from 'vitest';
 import type { APIRequest, IRequestMiddleware } from '$lib/api/middleware/IRequestMiddleware';
@@ -212,5 +212,24 @@ describe('BaseApi', () => {
 		await api.TestDeleteWithQueryParameters();
 
 		expect(mockFetch).toHaveBeenCalled();
+	});
+
+	it('throws an error if an error response is received', async () => {
+		let errorResponse: ServerErrorResponse = {
+			code: 500,
+			message: 'Internal Server Error'
+		};
+
+		let mockFetch = mockApi({
+			'/test': errorResponse
+		});
+
+		try {
+			await api.TestGet();
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeDefined();
+			expect(error.message).toEqual(errorResponse.message);
+		}
 	});
 });

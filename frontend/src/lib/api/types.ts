@@ -42,3 +42,7 @@ export interface LoginRequest {
 export interface UserResponse {
 	username: string;
 }
+
+export interface TokenResponse {
+	token: string;
+}
