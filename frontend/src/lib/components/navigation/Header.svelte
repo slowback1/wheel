@@ -8,7 +8,7 @@
 	import { Messages } from '$lib/bus/Messages';
 	import LogOutButton from '$lib/components/navigation/LogOutButton.svelte';
 
-	const { userService } = $props() as HeaderProps;
+	const { userService }: HeaderProps = $props();
 
 	let isLoggedIn = $state(false);
 
