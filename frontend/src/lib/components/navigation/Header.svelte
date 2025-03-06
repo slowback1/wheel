@@ -24,6 +24,7 @@
 
 	<HeaderLink href="/" label="Home" />
 	{#if !isLoggedIn}
+		<HeaderLink href="/user/login" label="Login" />
 		<HeaderLink href="/user/register" label="Register" />
 	{:else}
 		<LogOutButton {userService} />
