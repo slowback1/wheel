@@ -58,4 +58,24 @@ describe('UserService', () => {
 			expect(userService.getUserId()).toBe('testUserId');
 		});
 	});
+
+	describe('logOut', () => {
+		beforeEach(() => {
+			logInUser();
+		});
+
+		it('clears the user session data', () => {
+			let userService = new UserService();
+			userService.logOut();
+
+			expect(MessageBus.getLastMessage(Messages.UserSession)).toBeNull();
+		});
+
+		it('clears the user token data', () => {
+			let userService = new UserService();
+			userService.logOut();
+
+			expect(MessageBus.getLastMessage(Messages.UserToken)).toBeNull();
+		});
+	});
 });

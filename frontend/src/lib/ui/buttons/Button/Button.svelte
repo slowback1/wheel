@@ -67,7 +67,7 @@
 	}
 
 	.button-text {
-		--button-color: var(--color-background);
+		--button-color: transparent;
 		--button-border-color: transparent;
 	}
 

@@ -13,4 +13,6 @@ export default class TestUserService implements IUserService {
 	getUserId(): string {
 		return this.userId;
 	}
+
+	logOut() {}
 }

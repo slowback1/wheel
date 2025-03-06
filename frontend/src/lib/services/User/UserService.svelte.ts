@@ -5,6 +5,7 @@ import { Messages } from '$lib/bus/Messages';
 export interface IUserService {
 	isLoggedIn(): boolean;
 	getUserId(): string;
+	logOut(): void;
 }
 
 export default class UserService implements IUserService {
@@ -37,5 +38,10 @@ export default class UserService implements IUserService {
 		}
 
 		return '';
+	}
+
+	logOut() {
+		MessageBus.sendMessage(Messages.UserSession, null);
+		MessageBus.sendMessage(Messages.UserToken, null);
 	}
 }

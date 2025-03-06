@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import MessageBus from '$lib/bus/MessageBus';
 	import { Messages } from '$lib/bus/Messages';
+	import LogOutButton from '$lib/components/navigation/LogOutButton.svelte';
 
 	const { userService } = $props() as HeaderProps;
 
@@ -24,6 +25,8 @@
 	<HeaderLink href="/" label="Home" />
 	{#if !isLoggedIn}
 		<HeaderLink href="/user/register" label="Register" />
+	{:else}
+		<LogOutButton {userService} />
 	{/if}
 
 	<ThemeToggle />
