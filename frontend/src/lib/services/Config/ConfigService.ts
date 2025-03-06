@@ -5,7 +5,17 @@ import type { FeatureFlag } from '$lib/services/FeatureFlag/IFeatureFlagProvider
 export type ApplicationConfig = {
 	baseUrl: string;
 	featureFlags: FeatureFlag[];
+	wheel: WheelConfig;
 };
+
+export type WheelConfig = {
+	style: WheelStyle;
+};
+
+export enum WheelStyle {
+	Traditional = 'traditional',
+	Party = 'party'
+}
 
 export default class ConfigService {
 	static initialize() {

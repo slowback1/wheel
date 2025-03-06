@@ -8,14 +8,18 @@
 	import WheelPageAlertService from '$lib/pages/wheel/WheelPageAlertService.svelte';
 	import Alert from '$lib/ui/containers/alert/Alert.svelte';
 	import { AlertType } from '$lib/ui/containers/alert/alertTypes';
+	import ConfigService, { type WheelConfig, WheelStyle } from '$lib/services/Config/ConfigService';
 
 	let service: WheelPageService;
 	let alertService = new WheelPageAlertService();
+	let wheelConfig: WheelConfig;
 
 	onMount(() => {
 		let unsubscribe = MessageBus.subscribe(Messages.ApiContext, (api) => {
 			service = new WheelPageService(api);
 		});
+
+		wheelConfig = new ConfigService().getConfig('wheel');
 
 		return () => {
 			unsubscribe();
@@ -40,12 +44,18 @@
 
 		<div class="wheel-page__body">
 			<div class="wheel-page__wheel">
-				<SpinnerWheel
-					slices={service.wheelSlices}
-					selectedSlice={service.landedSlice}
-					onSpin={() => service.spin()}
-					isSpinning={service.isSpinning}
-				/>
+				{#if wheelConfig.style === WheelStyle.Traditional}
+					<SpinnerWheel
+						slices={service.wheelSlices}
+						selectedSlice={service.landedSlice}
+						onSpin={() => service.spin()}
+						isSpinning={service.isSpinning}
+					/>
+				{/if}
+				{#if wheelConfig.style === WheelStyle.Party}
+					<p>WHOOOOO PARTY!!!!</p>
+					<p>(this feature is in progress)</p>
+				{/if}
 			</div>
 			<div class="wheel-page__form">
 				<WheelForm

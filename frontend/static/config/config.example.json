@@ -5,5 +5,8 @@
       "name": "DEMO_FEATURE_FLAG",
       "isEnabled": false 
     }
-  ]
+  ],
+  "wheel": {
+    "style": "traditional"
+  } 
 }
