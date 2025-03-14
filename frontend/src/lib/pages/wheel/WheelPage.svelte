@@ -9,6 +9,7 @@
 	import Alert from '$lib/ui/containers/alert/Alert.svelte';
 	import { AlertType } from '$lib/ui/containers/alert/alertTypes';
 	import ConfigService, { type WheelConfig, WheelStyle } from '$lib/services/Config/ConfigService';
+	import TextSpinner from '$lib/partials/wheel/text/TextSpinner.svelte';
 
 	let service: WheelPageService;
 	let alertService = new WheelPageAlertService();
@@ -55,6 +56,14 @@
 				{#if wheelConfig.style === WheelStyle.Party}
 					<p>WHOOOOO PARTY!!!!</p>
 					<p>(this feature is in progress)</p>
+				{/if}
+				{#if wheelConfig.style === WheelStyle.Text}
+					<TextSpinner
+						isSpinning={service.isSpinning}
+						landedSlice={service.landedSlice}
+						onSpin={() => service.spin()}
+						slices={service.wheelSlices}
+					/>
 				{/if}
 			</div>
 			<div class="wheel-page__form">

@@ -14,7 +14,8 @@ export type WheelConfig = {
 
 export enum WheelStyle {
 	Traditional = 'traditional',
-	Party = 'party'
+	Party = 'party',
+	Text = 'text'
 }
 
 export default class ConfigService {

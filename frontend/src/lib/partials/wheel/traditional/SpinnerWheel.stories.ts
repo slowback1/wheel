@@ -4,7 +4,7 @@ import { getNSliceWheel, getTestWheelSetting } from '$lib/testHelpers/testData/t
 import { getRandomNumber } from '$lib/utils/numberUtils';
 
 const meta: Meta = {
-	title: 'Partials/Spinner Wheel',
+	title: 'Partials/Wheel/Spinner Wheel',
 	component: SpinnerWheel
 };
 
