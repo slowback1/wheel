@@ -13,6 +13,8 @@ var builder = new ConfigurationBuilder()
 var configuration = builder.Build();
 var discordToken = configuration["Discord:Token"];
 
+if (Environment.GetEnvironmentVariable("DISCORD_TOKEN") is string token) discordToken = token;
+
 var config = new DiscordSocketConfig
 {
     MessageCacheSize = 100
