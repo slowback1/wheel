@@ -15,8 +15,6 @@
         <PackageReference Include="NUnit" Version="3.14.0"/>
         <PackageReference Include="NUnit.Analyzers" Version="3.9.0"/>
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0"/>
-        <PackageReference Include="SpecFlow" Version="3.9.74"/>
-        <PackageReference Include="SpecFlow.NUnit" Version="3.9.74"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -24,9 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Data.InMemory\Data.InMemory.csproj"/>
-        <ProjectReference Include="..\UseCases\UseCases.csproj"/>
-        <ProjectReference Include="..\TestUtilities\TestUtilities.csproj"/>
+        <ProjectReference Include="..\..\Data.InMemory\Data.InMemory.csproj"/>
+        <ProjectReference Include="..\..\TestUtilities\TestUtilities.csproj"/>
     </ItemGroup>
 
 </Project>

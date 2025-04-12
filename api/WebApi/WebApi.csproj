@@ -13,14 +13,15 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Common\Common.csproj"/>
-        <ProjectReference Include="..\Data\Data.csproj"/>
+        <ProjectReference Include="..\Data.File\Data.File.csproj"/>
+        <ProjectReference Include="..\Data.InMemory\Data.InMemory.csproj"/>
         <ProjectReference Include="..\UseCases\UseCases.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
 </Project>
