@@ -16,6 +16,8 @@ public class UsageHandler : BaseDiscordHandler, IDiscordHandler
 !list-presets - Lists your presets
 !spin <comma-separated list> - Spins the wheel with the specified settings
 !usage - Displays this message
+!add <name>|<comma separated list> - Adds a new preset with the specified name
+!spin-preset <name> - Spins the wheel with the specified preset
 ";
     }
 }

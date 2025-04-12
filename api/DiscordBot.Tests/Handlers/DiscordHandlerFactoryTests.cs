@@ -10,6 +10,7 @@ public class DiscordHandlerFactoryTests
     [TestCase("usage", typeof(UsageHandler))]
     [TestCase("spin", typeof(SpinHandler))]
     [TestCase("add", typeof(AddPresetHandler))]
+    [TestCase("spin-preset", typeof(SpinPresetHandler))]
     public void CreateHandler_ShouldReturnTheCorrectHandler(string command, Type expectedType)
     {
         var context = new DiscordActionContext
