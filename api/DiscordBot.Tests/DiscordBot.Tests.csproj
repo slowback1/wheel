@@ -23,6 +23,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DiscordBot\DiscordBot.csproj"/>
+        <ProjectReference Include="..\TestUtilities\TestUtilities.csproj"/>
     </ItemGroup>
 
 </Project>

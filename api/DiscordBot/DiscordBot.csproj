@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Data.File\Data.File.csproj"/>
         <ProjectReference Include="..\UseCases\UseCases.csproj"/>
     </ItemGroup>
 

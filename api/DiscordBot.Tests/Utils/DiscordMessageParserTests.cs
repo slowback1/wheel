@@ -72,4 +72,86 @@ public class DiscordMessageParserTests
 
         Assert.That(result.Slices.First().Label, Is.EqualTo(message));
     }
+
+    [Test]
+    public void ParseMessage_ShouldReturnEmptyContext_WhenMessageIsEmpty()
+    {
+        var message = "";
+
+        var result = DiscordMessageParser.ParseMessage(message);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.Command, Is.Empty);
+        Assert.That(result.Argument, Is.Empty);
+    }
+
+    [Test]
+    public void ParseMessage_ShouldParseCommandWhenGivenValidSyntax()
+    {
+        var message = "!command argument";
+
+        var result = DiscordMessageParser.ParseMessage(message);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.Command, Is.EqualTo("command"));
+    }
+
+    [Test]
+    public void ParseMessage_StripsMentions()
+    {
+        var message = "<@123456789> !command argument";
+
+        var result = DiscordMessageParser.ParseMessage(message);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.Command, Is.EqualTo("command"));
+    }
+
+    [Test]
+    public void ParseMessage_ReturnsCommand_WhenNoArgument()
+    {
+        var message = "!command";
+
+        var result = DiscordMessageParser.ParseMessage(message);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.Command, Is.EqualTo("command"));
+    }
+
+    [Test]
+    public void ParseMessage_LowercasesCommand()
+    {
+        var message = "!COMMAND argument";
+
+        var result = DiscordMessageParser.ParseMessage(message);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.Command, Is.EqualTo("command"));
+    }
+
+    [Test]
+    [TestCase("!command argument", "argument")]
+    [TestCase("<@123456789> !command argument", "argument")]
+    [TestCase("!command", "")]
+    [TestCase("!command ", "")]
+    [TestCase("!command argument that is long", "argument that is long")]
+    public void ParseMessage_ShouldReturnCorrectArgument(string message, string expectedArgument)
+    {
+        var result = DiscordMessageParser.ParseMessage(message);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.Argument, Is.EqualTo(expectedArgument));
+    }
+
+    [Test]
+    public void ParseMessage_PassesTheUserIdThrough()
+    {
+        var message = "<@123456789> !command argument";
+        var userId = 123456789;
+
+        var result = DiscordMessageParser.ParseMessage(message, (ulong)userId);
+
+        Assert.IsNotNull(result);
+        Assert.That(result.UserId, Is.EqualTo((ulong)userId));
+    }
 }
