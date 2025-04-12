@@ -10,8 +10,12 @@ public class UsageHandler : BaseDiscordHandler, IDiscordHandler
     {
     }
 
-    public Task<string> HandleAsync()
+    public async Task<string> HandleAsync()
     {
-        throw new NotImplementedException();
+        return @"Usage:
+!list-presets - Lists your presets
+!spin <comma-separated list> - Spins the wheel with the specified settings
+!usage - Displays this message
+";
     }
 }

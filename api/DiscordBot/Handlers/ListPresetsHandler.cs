@@ -10,8 +10,17 @@ public class ListPresetsHandler : BaseDiscordHandler, IDiscordHandler
     {
     }
 
-    public Task<string> HandleAsync()
+    public async Task<string> HandleAsync()
     {
-        throw new NotImplementedException();
+        var user = await GetOrCreateUser(Context.UserId);
+
+        var wheelSettings = (await DataAccess.WheelRetriever.GetWheelSettings(user.Username)).ToArray();
+
+        if (!wheelSettings.Any())
+            return "No presets found.";
+
+        var presetList = string.Join(", ", wheelSettings.Select(w => w.Name));
+
+        return $"Your presets: {presetList}";
     }
 }
