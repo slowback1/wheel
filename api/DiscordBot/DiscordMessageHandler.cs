@@ -1,6 +1,7 @@
 ﻿using Common.Data;
 using Discord;
 using Discord.WebSocket;
+using DiscordBot.Utils;
 using UseCases.Spinning;
 
 namespace DiscordBot;
@@ -38,23 +39,9 @@ internal class DiscordMessageHandler
 
         await message.AddReactionAsync(new Emoji("🛞"));
 
-        var contentWithoutMention = stripMentions(content);
-
-        var wheelOptions = contentWithoutMention.Split(',');
-
         var spinner = new WheelSpinningUseCase();
 
-        var options = wheelOptions.Select(x => new WheelSlice
-        {
-            Label = x,
-            Size = 1
-        });
-
-        var wheel = new WheelSetting
-        {
-            Slices = options.ToList(),
-            Name = "Discord Bot Wheel"
-        };
+        var wheel = DiscordMessageParser.ParseWheelSetting(content);
 
         var result = spinner.SpinTheWheel(wheel, new WheelSpinOptions { Mode = WheelSpinMode.Random });
 
@@ -67,14 +54,5 @@ internal class DiscordMessageHandler
         {
             await message.Channel.SendMessageAsync("I am sorry, but I cannot spin the wheel right now.");
         }
-    }
-
-    private string stripMentions(string message)
-    {
-        var mentionIndex = message.IndexOf("<@");
-        if (mentionIndex == -1) return message;
-        var endIndex = message.IndexOf('>', mentionIndex);
-        if (endIndex == -1) return message;
-        return message.Remove(mentionIndex, endIndex - mentionIndex + 1);
     }
 }
