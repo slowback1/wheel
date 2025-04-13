@@ -15,7 +15,12 @@ internal class FileStoreRetriever : IFileStoreRetriever
     {
         var path = _settings.StoragePath;
 
-        if (!System.IO.File.Exists(path)) return new FileStore();
+        if (!System.IO.File.Exists(path))
+        {
+            System.IO.File.WriteAllText(path, "{}");
+
+            return new FileStore();
+        }
 
         var json = System.IO.File.ReadAllText(path);
 

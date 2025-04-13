@@ -41,7 +41,7 @@ internal class DiscordMessageHandler
 
         await message.AddReactionAsync(new Emoji("🛞"));
 
-        var context = DiscordMessageParser.ParseMessage(content);
+        var context = DiscordMessageParser.ParseMessage(content, message.Author.Id);
 
         var handler = DiscordHandlerFactory.CreateHandler(context, DataAccess);
 

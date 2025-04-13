@@ -1,7 +1,6 @@
 ﻿using Common.Data;
 using Common.Interfaces;
 using DiscordBot.Models;
-using UseCases.User;
 
 namespace DiscordBot.Handlers;
 
@@ -21,9 +20,7 @@ public abstract class BaseDiscordHandler
     {
         var userId = discordId.ToString();
 
-        var registerUserUseCase = new RegisterUserUseCase(DataAccess);
-
-        await registerUserUseCase.Register(new CreateUser
+        await DataAccess.UserCreator.CreateUser(new CreateUser
         {
             Username = userId,
             Password = userId

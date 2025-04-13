@@ -17,7 +17,7 @@ public class SpinHandler : BaseDiscordHandler, IDiscordHandler
     {
         var spinUseCase = new WheelSpinningUseCase();
 
-        var wheel = DiscordMessageParser.ParseWheelSetting(Context.Command);
+        var wheel = DiscordMessageParser.ParseWheelSetting(Context.Argument);
 
         var spinResult = spinUseCase.SpinTheWheel(wheel, new WheelSpinOptions { Mode = WheelSpinMode.Random });
 

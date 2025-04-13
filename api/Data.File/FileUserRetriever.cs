@@ -16,6 +16,7 @@ internal class FileUserRetriever : FileRepository, IUserRetriever
 
     public async Task<User?> GetUser(string username)
     {
+        Load();
         var stored = GetFileUser(username);
 
         return stored?.ToUser();
