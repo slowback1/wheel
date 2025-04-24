@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using DiscordBot;
 using Microsoft.Extensions.Configuration;
 
+Console.WriteLine("initializing bot");
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
 var builder = new ConfigurationBuilder()
