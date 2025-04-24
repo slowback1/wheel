@@ -32,21 +32,33 @@ internal class DiscordMessageHandler
 
     public async Task OnMessageReceived(SocketMessage message)
     {
-        if (message is not SocketUserMessage userMessage) return;
-        var channel = message.Channel as SocketTextChannel;
-        if (channel == null) return;
-        var content = message.Content;
-        if (content is null) return;
-        if (!message.MentionedUsers.Select(x => x.Username).Contains("Wheel of Slowback")) return;
+        await TryHandleOnMessageReceived(message);
+    }
 
-        await message.AddReactionAsync(new Emoji("🛞"));
+    private async Task TryHandleOnMessageReceived(SocketMessage message)
+    {
+        try
+        {
+            if (message is not SocketUserMessage userMessage) return;
+            var channel = message.Channel as SocketTextChannel;
+            if (channel == null) return;
+            var content = message.Content;
+            if (content is null) return;
+            if (!message.MentionedUsers.Select(x => x.Username).Contains("Wheel of Slowback")) return;
 
-        var context = DiscordMessageParser.ParseMessage(content, message.Author.Id);
+            await message.AddReactionAsync(new Emoji("🛞"));
 
-        var handler = DiscordHandlerFactory.CreateHandler(context, DataAccess);
+            var context = DiscordMessageParser.ParseMessage(content, message.Author.Id);
 
-        var response = await handler.HandleAsync();
+            var handler = DiscordHandlerFactory.CreateHandler(context, DataAccess);
 
-        await message.Channel.SendMessageAsync($"{MentionUtils.MentionUser(message.Author.Id)} {response}");
+            var response = await handler.HandleAsync();
+
+            await message.Channel.SendMessageAsync($"{MentionUtils.MentionUser(message.Author.Id)} {response}");
+        }
+        catch (Exception e)
+        {
+            Console.Write(e);
+        }
     }
 }
