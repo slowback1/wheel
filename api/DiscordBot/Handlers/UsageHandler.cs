@@ -19,7 +19,8 @@ public class UsageHandler : BaseDiscordHandler, IDiscordHandler
 !add <name>|<comma separated list> - Adds a new preset with the specified name
 !spin-preset <name> - Spins the wheel with the specified preset
 !update <name>|<comma separated list> - Updates the specified preset with the new settings
-!describe <name> - Lists the possible options for the specified preset 
+!describe <name> - Lists the possible options for the specified preset
+!delete <name> - Deletes the specified preset 
 ";
     }
 }
