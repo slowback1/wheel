@@ -15,6 +15,7 @@ public abstract class WheelDsl
         GetWheelSettingsUseCase = new GetWheelSettingsUseCase(dataAccess);
         UpdateWheelUseCase = new UpdateWheelUseCase(dataAccess);
         ManagingUsersDsl = new ManagingUsersNotCreatedYetDsl();
+        DeleteWheelSettingUseCase = new DeleteWheelSettingUseCase(dataAccess);
 
         CreateUsers().Wait();
         SetupData().Wait();
@@ -34,11 +35,13 @@ public abstract class WheelDsl
     public FeatureResult<WheelSetting>? LastLoadedWheel { get; set; }
     public FeatureResult<WheelSetting>? LastCreatedWheel { get; set; }
     public FeatureResult<IEnumerable<WheelSetting>>? LastLoadedWheels { get; set; }
+    public FeatureResult<bool>? LastDeletedWheelResult { get; set; }
 
     protected CreateWheelSettingUseCase CreateWheelSettingUseCase { get; set; }
     protected GetWheelSettingUseCase GetWheelSettingUseCase { get; set; }
     protected UpdateWheelUseCase UpdateWheelUseCase { get; set; }
     protected GetWheelSettingsUseCase GetWheelSettingsUseCase { get; set; }
+    protected DeleteWheelSettingUseCase DeleteWheelSettingUseCase { get; set; }
 
     private async Task CreateUsers()
     {
@@ -142,5 +145,12 @@ public abstract class WheelDsl
         Assert.That(lastError, Is.Not.Null);
 
         Assert.That(lastError!.Message, Contains.Substring(message));
+    }
+
+    public async Task DeleteWheel(string name)
+    {
+        var result = await DeleteWheelSettingUseCase.DeleteWheelSetting(name);
+
+        LastDeletedWheelResult = result;
     }
 }

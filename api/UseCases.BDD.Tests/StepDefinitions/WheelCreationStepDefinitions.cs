@@ -201,4 +201,21 @@ public sealed class WheelCreationStepDefinitions
     {
         await Feature.UpdateWheel(new WheelSetting());
     }
+
+    [When(@"I delete the wheel")]
+    public async Task WhenIDeleteTheWheel()
+    {
+        var wheel = (await Feature.GetWheel(Feature.FirstWheelName)).Data;
+
+        await Feature.DeleteWheel(wheel!.Name);
+    }
+
+    [Then(@"The wheel should be deleted")]
+    public void ThenTheWheelShouldBeDeleted()
+    {
+        var lastDeleteResult = Feature.LastDeletedWheelResult!;
+
+        Assert.That(lastDeleteResult.Status, Is.EqualTo(FeatureResultStatus.Ok));
+        Assert.That(lastDeleteResult.Data, Is.True);
+    }
 }

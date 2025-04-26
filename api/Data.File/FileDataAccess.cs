@@ -14,6 +14,7 @@ public class FileDataAccess : IDataAccess
         UserCreator = new FileUserCreator(store);
         UserRetriever = new FileUserRetriever(store);
         WheelUpdater = new FileWheelUpdater(store);
+        WheelDeleter = new FileWheelDeleter(store);
     }
 
     public IWheelCreator WheelCreator { get; }
@@ -21,4 +22,5 @@ public class FileDataAccess : IDataAccess
     public IUserCreator UserCreator { get; }
     public IUserRetriever UserRetriever { get; }
     public IWheelUpdater WheelUpdater { get; }
+    public IWheelDeleter WheelDeleter { get; }
 }

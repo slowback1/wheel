@@ -52,8 +52,6 @@
         When I try to edit a wheel but the system fails to save
         Then I should be notified that the system failed to save the wheel
 
-    @ignore
-    @not-implemented
     Scenario: User deletes a wheel
         Given I have created a wheel
         When I delete the wheel
