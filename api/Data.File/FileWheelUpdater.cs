@@ -1,14 +1,37 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Common.Data;
 using Common.Interfaces;
+using Data.File.Mappers;
+using Data.File.Models;
+using Data.File.Store;
 
 namespace Data.File;
 
-public class FileWheelUpdater : IWheelUpdater
+internal class FileWheelUpdater : FileRepository, IWheelUpdater
 {
-    public Task<SaveResult<WheelSetting>> UpdateWheelSetting(WheelSetting wheelSetting)
+    public FileWheelUpdater(IFileStoreRetriever retriever) : base(retriever)
     {
-        throw new NotImplementedException();
+    }
+
+    public async Task<SaveResult<WheelSetting>> UpdateWheelSetting(WheelSetting wheelSetting)
+    {
+        var stored = await GetFileWheel(wheelSetting);
+
+        stored.Name = wheelSetting.Name;
+        stored.Slices = wheelSetting.Slices.Select(x => x.ToFileWheelSlice()).ToList();
+
+        SaveChanges();
+
+        return SaveResult<WheelSetting>.Success(stored.ToWheelSetting());
+    }
+
+    private async Task<FileWheel?> GetFileWheel(WheelSetting wheelSetting)
+    {
+        Load();
+
+        var fileWheel = Wheels.FirstOrDefault(w => w.Name == wheelSetting.Name);
+
+        return fileWheel;
     }
 }

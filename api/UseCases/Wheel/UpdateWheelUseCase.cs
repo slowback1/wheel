@@ -13,6 +13,13 @@ public class UpdateWheelUseCase : DataAccessorUseCase
 
     public async Task<FeatureResult<WheelSetting>> UpdateWheelSetting(string wheelId, WheelSetting wheelSetting)
     {
-        return null;
+        var stored = await _dataAccess.WheelRetriever.GetWheelSetting(wheelId);
+
+        stored.Name = wheelSetting.Name;
+        stored.Slices = wheelSetting.Slices;
+
+        var result = await _dataAccess.WheelUpdater.UpdateWheelSetting(stored);
+
+        return FeatureResult<WheelSetting>.Ok(result.SavedEntity!);
     }
 }

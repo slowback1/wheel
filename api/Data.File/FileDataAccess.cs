@@ -13,7 +13,7 @@ public class FileDataAccess : IDataAccess
         WheelRetriever = new FileWheelRetriever(store);
         UserCreator = new FileUserCreator(store);
         UserRetriever = new FileUserRetriever(store);
-        WheelUpdater = new FileWheelUpdater();
+        WheelUpdater = new FileWheelUpdater(store);
     }
 
     public IWheelCreator WheelCreator { get; }

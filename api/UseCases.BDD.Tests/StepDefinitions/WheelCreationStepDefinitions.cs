@@ -99,7 +99,7 @@ public sealed class WheelCreationStepDefinitions
     [Then(@"The wheel should be updated")]
     public async Task ThenTheWheelShouldBeUpdated()
     {
-        var wheel = (await Feature.GetWheel(Feature.FirstWheelName)).Data;
+        var wheel = (await Feature.GetWheel("New Name")).Data;
 
         Assert.That(wheel, Is.Not.Null);
 
