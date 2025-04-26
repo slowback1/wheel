@@ -35,8 +35,6 @@
         When I create a wheel
         Then The message bus should broadcast the wheel creation
 
-    @ignore
-    @not-implemented
     Scenario: User edits a wheel
         Given I have created a wheel
         When I edit the wheel

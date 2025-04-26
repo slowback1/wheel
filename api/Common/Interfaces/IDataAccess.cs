@@ -6,4 +6,5 @@ public interface IDataAccess
     IWheelRetriever WheelRetriever { get; }
     IUserCreator UserCreator { get; }
     IUserRetriever UserRetriever { get; }
+    IWheelUpdater WheelUpdater { get; }
 }

@@ -13,6 +13,7 @@ public abstract class WheelDsl
         CreateWheelSettingUseCase = new CreateWheelSettingUseCase(dataAccess);
         GetWheelSettingUseCase = new GetWheelSettingUseCase(dataAccess);
         GetWheelSettingsUseCase = new GetWheelSettingsUseCase(dataAccess);
+        UpdateWheelUseCase = new UpdateWheelUseCase(dataAccess);
         ManagingUsersDsl = new ManagingUsersNotCreatedYetDsl();
 
         CreateUsers().Wait();
@@ -36,6 +37,7 @@ public abstract class WheelDsl
 
     protected CreateWheelSettingUseCase CreateWheelSettingUseCase { get; set; }
     protected GetWheelSettingUseCase GetWheelSettingUseCase { get; set; }
+    protected UpdateWheelUseCase UpdateWheelUseCase { get; set; }
     protected GetWheelSettingsUseCase GetWheelSettingsUseCase { get; set; }
 
     private async Task CreateUsers()
@@ -77,6 +79,15 @@ public abstract class WheelDsl
     public async Task<FeatureResult<WheelSetting>> GetWheel(string name)
     {
         return await GetWheelSettingUseCase.GetWheelSetting(name);
+    }
+
+    public async Task<FeatureResult<WheelSetting>> UpdateWheel(WheelSetting setting)
+    {
+        var result = await UpdateWheelUseCase.UpdateWheelSetting(setting.Name, setting);
+
+        LastCreatedWheel = result;
+
+        return result;
     }
 
     public async Task AssertWheelExists(string name)

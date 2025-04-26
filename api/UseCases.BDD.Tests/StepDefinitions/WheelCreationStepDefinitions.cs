@@ -78,9 +78,22 @@ public sealed class WheelCreationStepDefinitions
     }
 
     [When(@"I edit the wheel")]
-    public void WhenIEditTheWheel()
+    public async Task WhenIEditTheWheel()
     {
-        Assert.Fail("Feature not implemented");
+        var wheel = (await Feature.GetWheel(Feature.FirstWheelName)).Data;
+
+        wheel.Name = "New Name";
+        var slices = wheel.Slices.ToList();
+
+        slices.Add(new WheelSlice
+        {
+            Label = "New Slice",
+            Size = 2
+        });
+
+        wheel.Slices = slices;
+
+        await Feature.UpdateWheel(wheel);
     }
 
     [Then(@"The wheel should be updated")]
