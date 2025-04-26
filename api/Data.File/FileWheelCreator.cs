@@ -16,6 +16,8 @@ internal class FileWheelCreator : FileRepository, IWheelCreator
 
     public async Task<SaveResult<WheelSetting>> CreateWheelSetting(CreateWheelSetting wheelSetting)
     {
+        Load();
+
         var entity = wheelSetting.ToFileWheel();
 
         var existingWheel = Wheels.FirstOrDefault(w => w.Name == entity.Name && w.Username == entity.Username);

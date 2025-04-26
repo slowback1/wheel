@@ -15,6 +15,8 @@ internal class FileUserCreator : FileRepository, IUserCreator
 
     public async Task<SaveResult<User>> CreateUser(CreateUser user)
     {
+        Load();
+
         var userExists = Users.Any(u => u.Username == user.Username);
 
         if (userExists) return SaveResult<User>.Failure("User already exists");

@@ -16,11 +16,15 @@ internal class FileWheelRetriever : FileRepository, IWheelRetriever
 
     public async Task<WheelSetting?> GetWheelSetting(string wheelId)
     {
+        Load();
+
         return Wheels.FirstOrDefault(w => w.Name == wheelId)?.ToWheelSetting();
     }
 
     public async Task<IEnumerable<WheelSetting>> GetWheelSettings(string username)
     {
+        Load();
+
         return Wheels
             .Where(w => w.Username == username)
             .Select(w => w.ToWheelSetting())

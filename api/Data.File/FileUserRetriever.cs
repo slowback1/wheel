@@ -16,7 +16,6 @@ internal class FileUserRetriever : FileRepository, IUserRetriever
 
     public async Task<User?> GetUser(string username)
     {
-        Load();
         var stored = GetFileUser(username);
 
         return stored?.ToUser();
@@ -31,6 +30,8 @@ internal class FileUserRetriever : FileRepository, IUserRetriever
 
     private FileUser? GetFileUser(string username)
     {
+        Load();
+
         return Users.FirstOrDefault(u => u.Username == username);
     }
 }
