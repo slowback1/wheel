@@ -195,4 +195,10 @@ public sealed class WheelCreationStepDefinitions
     {
         Feature.AssertViewErrorMessageIs("log in");
     }
+
+    [When(@"I try to edit a wheel that does not exist")]
+    public async Task WhenITryToEditAWheelThatDoesNotExist()
+    {
+        await Feature.UpdateWheel(new WheelSetting());
+    }
 }

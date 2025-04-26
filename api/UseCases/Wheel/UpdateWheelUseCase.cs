@@ -15,6 +15,8 @@ public class UpdateWheelUseCase : DataAccessorUseCase
     {
         var stored = await _dataAccess.WheelRetriever.GetWheelSetting(wheelId);
 
+        if (stored is null) return FeatureResult<WheelSetting>.NotFound();
+
         stored.Name = wheelSetting.Name;
         stored.Slices = wheelSetting.Slices;
 

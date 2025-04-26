@@ -40,8 +40,6 @@
         When I edit the wheel
         Then The wheel should be updated
 
-    @ignore
-    @not-implemented
     Scenario: User tries to edit a wheel that does not exist
         Given I have created a wheel
         When I try to edit a wheel that does not exist

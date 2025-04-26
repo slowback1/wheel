@@ -86,6 +86,7 @@ public abstract class WheelDsl
         var result = await UpdateWheelUseCase.UpdateWheelSetting(setting.Name, setting);
 
         LastCreatedWheel = result;
+        LastLoadedWheel = result;
 
         return result;
     }
