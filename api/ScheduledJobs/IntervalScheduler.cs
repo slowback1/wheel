@@ -23,7 +23,21 @@ public class IntervalScheduler
     {
         // Run immediately and then every hour
         _timer = new Timer(
-            async _ => await CheckAndExecuteIntervals(),
+            _ => 
+            {
+                // Use Task.Run to avoid blocking and handle exceptions
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await CheckAndExecuteIntervals();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error in interval scheduler: {ex.Message}");
+                    }
+                });
+            },
             null,
             TimeSpan.Zero,
             TimeSpan.FromHours(1)

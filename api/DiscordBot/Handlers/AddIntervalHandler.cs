@@ -53,23 +53,21 @@ public class AddIntervalHandler : BaseDiscordHandler, IDiscordHandler
 
     private bool TryParseFrequency(string frequencyStr, out IntervalFrequency frequency)
     {
-        frequency = IntervalFrequency.Hourly;
-        
         return frequencyStr switch
         {
-            "hourly" => SetFrequency(out frequency, IntervalFrequency.Hourly),
-            "daily" => SetFrequency(out frequency, IntervalFrequency.Daily),
-            "weekly" => SetFrequency(out frequency, IntervalFrequency.Weekly),
-            "monthly" => SetFrequency(out frequency, IntervalFrequency.Monthly),
-            "quarterly" => SetFrequency(out frequency, IntervalFrequency.Quarterly),
-            "yearly" => SetFrequency(out frequency, IntervalFrequency.Yearly),
-            _ => false
+            "hourly" => SetOut(out frequency, IntervalFrequency.Hourly),
+            "daily" => SetOut(out frequency, IntervalFrequency.Daily),
+            "weekly" => SetOut(out frequency, IntervalFrequency.Weekly),
+            "monthly" => SetOut(out frequency, IntervalFrequency.Monthly),
+            "quarterly" => SetOut(out frequency, IntervalFrequency.Quarterly),
+            "yearly" => SetOut(out frequency, IntervalFrequency.Yearly),
+            _ => SetOut(out frequency, IntervalFrequency.Hourly, false)
         };
     }
 
-    private bool SetFrequency(out IntervalFrequency frequency, IntervalFrequency value)
+    private static bool SetOut(out IntervalFrequency frequency, IntervalFrequency value, bool success = true)
     {
         frequency = value;
-        return true;
+        return success;
     }
 }
