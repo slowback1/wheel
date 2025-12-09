@@ -84,7 +84,6 @@ public class IntervalScheduler
                 message = $"Interval '{interval.Name}' executed: {result}";
             }
 
-            Console.WriteLine($"Sending interval message to channel {interval.ChannelId}: {message}");
             await _sendMessageToChannel(interval.ChannelId, message);
 
             // Update the last run time and calculate next run time
