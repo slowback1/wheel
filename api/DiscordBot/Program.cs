@@ -1,7 +1,9 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using DiscordBot;
+using DiscordBot.Utils;
 using Microsoft.Extensions.Configuration;
+using ScheduledJobs;
 
 Console.WriteLine("initializing bot");
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
@@ -33,5 +35,11 @@ var handler = new DiscordMessageHandler(self);
 client.MessageUpdated += handler.OnMessageUpdated;
 client.MessageReceived += handler.OnMessageReceived;
 client.Ready += handler.OnReady;
+
+// Initialize the interval scheduler
+var dataAccess = DataAccessRetriever.GetDataAccess();
+var scheduler = new IntervalScheduler(dataAccess);
+scheduler.Start();
+Console.WriteLine("Interval scheduler started");
 
 await Task.Delay(-1);
