@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Data;
@@ -21,7 +22,8 @@ public enum WheelSpinMode
 
 public class WheelSpinningUseCase
 {
-    private static readonly Dictionary<string, int> LastSpinResults = new();
+    private const int MaxRespinAttempts = 100;
+    private static readonly ConcurrentDictionary<string, int> LastSpinResults = new();
 
     public FeatureResult<SpinResult> SpinTheWheel(WheelSetting wheel, WheelSpinOptions? options = null, string? userId = null)
     {
@@ -34,15 +36,10 @@ public class WheelSpinningUseCase
 
         var result = spinner.Spin(wheel);
         
-        // Prevent duplicate spins for the same user
+        // Prevent duplicate spins for the same user and store the result
         if (!string.IsNullOrEmpty(userId))
         {
             result = PreventDuplicateSpin(wheel, spinner, result, userId);
-        }
-
-        // Store the last spin result for this user
-        if (!string.IsNullOrEmpty(userId))
-        {
             LastSpinResults[userId] = result.SliceLanded;
         }
 
@@ -79,17 +76,15 @@ public class WheelSpinningUseCase
         }
 
         // Check if this user has spun before
-        if (!LastSpinResults.ContainsKey(userId))
+        if (!LastSpinResults.TryGetValue(userId, out var lastResult))
         {
             return result;
         }
 
-        var lastResult = LastSpinResults[userId];
-        var maxAttempts = 100; // Safety mechanism to prevent infinite loops
         var attempts = 0;
 
         // Keep spinning until we get a different result
-        while (result.SliceLanded == lastResult && attempts < maxAttempts)
+        while (result.SliceLanded == lastResult && attempts < MaxRespinAttempts)
         {
             result = spinner.Spin(wheel);
             attempts++;
