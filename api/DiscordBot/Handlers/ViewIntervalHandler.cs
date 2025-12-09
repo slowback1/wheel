@@ -32,6 +32,7 @@ public class ViewIntervalHandler : BaseDiscordHandler, IDiscordHandler
         return $"Interval: {interval.Name}\n" +
                $"Preset: {interval.PresetName}\n" +
                $"Frequency: {interval.Frequency}\n" +
+               $"Channel ID: {interval.ChannelId}\n" +
                $"Last Run: {lastRun}\n" +
                $"Next Run: {nextRun}";
     }

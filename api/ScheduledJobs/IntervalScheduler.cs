@@ -7,13 +7,13 @@ namespace ScheduledJobs;
 public class IntervalScheduler
 {
     private readonly IDataAccess _dataAccess;
-    private readonly Func<string, Task> _sendMessage;
+    private readonly Func<ulong, string, Task> _sendMessageToChannel;
     private Timer? _timer;
 
-    public IntervalScheduler(IDataAccess dataAccess, Func<string, Task> sendMessage)
+    public IntervalScheduler(IDataAccess dataAccess, Func<ulong, string, Task> sendMessageToChannel)
     {
         _dataAccess = dataAccess;
-        _sendMessage = sendMessage;
+        _sendMessageToChannel = sendMessageToChannel;
     }
 
     public void Start()
@@ -81,10 +81,11 @@ public class IntervalScheduler
                 );
 
                 var result = spinResult.Data?.GetLandedLabel() ?? "No result";
-                message = $"Interval '{interval.Name}' for user '{interval.Username}' executed: {result}";
+                message = $"Interval '{interval.Name}' executed: {result}";
             }
 
-            await _sendMessage(message);
+            Console.WriteLine($"Sending interval message to channel {interval.ChannelId}: {message}");
+            await _sendMessageToChannel(interval.ChannelId, message);
 
             // Update the last run time and calculate next run time
             var now = DateTime.UtcNow;

@@ -16,7 +16,9 @@ public class DiscordHandlerFactoryTests
         var context = new DiscordActionContext
         {
             Argument = "",
-            Command = command
+            Command = command,
+            UserId = 0,
+            ChannelId = 0
         };
 
         var dataAccess = new TestDataAccess();
@@ -32,7 +34,9 @@ public class DiscordHandlerFactoryTests
         var context = new DiscordActionContext
         {
             Argument = "",
-            Command = "unknown-command"
+            Command = "unknown-command",
+            UserId = 0,
+            ChannelId = 0
         };
 
         var dataAccess = new TestDataAccess();

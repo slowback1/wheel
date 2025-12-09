@@ -18,7 +18,8 @@ public class AddPresetHandlerTests
         {
             Argument = "TestPreset",
             Command = "add",
-            UserId = 1234567890
+            UserId = 1234567890,
+            ChannelId = 0
         };
     }
 

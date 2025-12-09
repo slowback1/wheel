@@ -38,13 +38,25 @@ client.Ready += handler.OnReady;
 
 // Initialize the interval scheduler
 var dataAccess = DataAccessRetriever.GetDataAccess();
-var scheduler = new IntervalScheduler(dataAccess, s =>
+var scheduler = new IntervalScheduler(dataAccess, async (channelId, message) =>
 {
-    //todo: set up the interval settings to send message to a specific channel
-    // it should be the same channel where the command was issued
-    // For now, just log to console, which should be removed/replaced with the actual message sending logic
-    Console.WriteLine($"Interval Scheduler Message: {s}");
-    return Task.CompletedTask;
+    try
+    {
+        var channel = client.GetChannel(channelId) as IMessageChannel;
+        if (channel != null)
+        {
+            await channel.SendMessageAsync(message);
+            Console.WriteLine($"Sent message to channel {channelId}: {message}");
+        }
+        else
+        {
+            Console.WriteLine($"Channel {channelId} not found. Message: {message}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error sending message to channel {channelId}: {ex.Message}");
+    }
 });
 scheduler.Start();
 Console.WriteLine("Interval scheduler started");

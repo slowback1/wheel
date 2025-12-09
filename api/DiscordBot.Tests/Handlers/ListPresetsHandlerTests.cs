@@ -19,7 +19,8 @@ public class ListPresetsHandlerTests
         {
             Argument = "",
             Command = "list-presets",
-            UserId = 12345
+            UserId = 12345,
+            ChannelId = 0
         };
     }
 

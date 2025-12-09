@@ -10,6 +10,7 @@ public class Interval
     public IntervalFrequency Frequency { get; set; }
     public DateTime LastRunTime { get; set; }
     public DateTime NextRunTime { get; set; }
+    public ulong ChannelId { get; set; }
 }
 
 public class CreateInterval
@@ -18,6 +19,7 @@ public class CreateInterval
     public string Username { get; set; }
     public string PresetName { get; set; }
     public IntervalFrequency Frequency { get; set; }
+    public ulong ChannelId { get; set; }
 }
 
 public enum IntervalFrequency

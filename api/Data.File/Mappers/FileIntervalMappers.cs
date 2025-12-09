@@ -17,7 +17,8 @@ internal static class FileIntervalMappers
             PresetName = fileInterval.PresetName,
             Frequency = Enum.Parse<IntervalFrequency>(fileInterval.Frequency),
             LastRunTime = fileInterval.LastRunTime,
-            NextRunTime = fileInterval.NextRunTime
+            NextRunTime = fileInterval.NextRunTime,
+            ChannelId = fileInterval.ChannelId
         };
     }
 
@@ -33,7 +34,8 @@ internal static class FileIntervalMappers
             PresetName = createInterval.PresetName,
             Frequency = createInterval.Frequency.ToString(),
             LastRunTime = DateTime.MinValue,
-            NextRunTime = nextRun
+            NextRunTime = nextRun,
+            ChannelId = createInterval.ChannelId
         };
     }
 

@@ -10,4 +10,5 @@ internal class FileInterval
     public string Frequency { get; set; }
     public DateTime LastRunTime { get; set; }
     public DateTime NextRunTime { get; set; }
+    public ulong ChannelId { get; set; }
 }

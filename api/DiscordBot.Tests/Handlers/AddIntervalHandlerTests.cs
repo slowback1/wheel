@@ -19,7 +19,8 @@ public class AddIntervalHandlerTests
         {
             Argument = "testInterval|TestPreset|hourly",
             Command = "add-interval",
-            UserId = 1234567890
+            UserId = 1234567890,
+            ChannelId = 9876543210
         };
 
         // Create a test preset first

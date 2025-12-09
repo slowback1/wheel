@@ -42,7 +42,8 @@ public class AddIntervalHandler : BaseDiscordHandler, IDiscordHandler
             Name = intervalName,
             Username = user.Username,
             PresetName = presetName,
-            Frequency = frequency
+            Frequency = frequency,
+            ChannelId = Context.ChannelId
         });
 
         if (!result.SaveSuccessful)

@@ -5,7 +5,7 @@ namespace DiscordBot.Utils;
 
 public static class DiscordMessageParser
 {
-    public static DiscordActionContext ParseMessage(string message, ulong userId = 0)
+    public static DiscordActionContext ParseMessage(string message, ulong userId = 0, ulong channelId = 0)
     {
         var stripped = StripMentions(message);
 
@@ -13,7 +13,8 @@ public static class DiscordMessageParser
         {
             Argument = GetArgument(stripped),
             Command = GetCommand(stripped),
-            UserId = userId
+            UserId = userId,
+            ChannelId = channelId
         };
     }
 
