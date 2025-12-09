@@ -13,7 +13,7 @@ public class SpinController : ControllerBase
     {
         var useCase = new WheelSpinningUseCase();
 
-        var result = useCase.SpinTheWheel(request.WheelSetting, request.Options);
+        var result = useCase.SpinTheWheel(request.WheelSetting, request.Options, UserToken);
         return ToActionResult(result);
     }
 }
