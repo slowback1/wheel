@@ -98,4 +98,28 @@ public class SpinningWheelsStepDefinitions
     {
         Feature.AssertThatWheelSpinErroredWith("Wheel has no slices");
     }
+
+    [Given(@"I am a user with id ""(.*)""")]
+    public void GivenIAmAUserWithId(string userId)
+    {
+        Feature.SetUserId(userId);
+    }
+
+    [Then(@"The last two spins should be different")]
+    public void ThenTheLastTwoSpinsShouldBeDifferent()
+    {
+        Feature.AssertLastTwoSpinsAreDifferent();
+    }
+
+    [Given(@"I have a wheel with only ""(.*)""")]
+    public void GivenIHaveAWheelWithOnly(string option)
+    {
+        Feature = new SpinningDslArgs(new[] { option });
+    }
+
+    [Then(@"The last spin should be ""(.*)""")]
+    public void ThenTheLastSpinShouldBe(string expected)
+    {
+        Feature.AssertLastSpinIs(expected);
+    }
 }

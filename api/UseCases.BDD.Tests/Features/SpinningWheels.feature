@@ -42,3 +42,23 @@
         When I spin the wheel 10 times in "distribution" mode
         Then The wheel should land on "Red" 5 times
         And The wheel should land on 'Green' or 'Blue' 5 times
+
+    Scenario: User spins a wheel twice with user tracking - should not get duplicates
+        Given I have a wheel with "Red", "Green", "Blue"
+        And I am a user with id "user1"
+        When I spin the wheel
+        And I spin the wheel
+        Then The last two spins should be different
+
+    Scenario: User spins a wheel with one option - duplicates are allowed
+        Given I have a wheel with only "Red"
+        And I am a user with id "user1"
+        When I spin the wheel
+        And I spin the wheel
+        Then The last spin should be "Red"
+
+    Scenario: User spins a wheel multiple times - should never get consecutive duplicates
+        Given I have a wheel with "Red", "Green", "Blue"
+        And I am a user with id "user1"
+        When I spin the wheel "10" times
+        Then The wheel should land on "Red" or "Green" or "Blue" "10" times

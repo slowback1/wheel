@@ -8,9 +8,15 @@ public abstract class SpinningDsl
     private List<SpinResult> SpinHistory { get; } = new();
     private string? LastErrorMessage { get; set; }
     private WheelSpinOptions? NextSpinOptions { get; set; }
+    private string? CurrentUserId { get; set; }
     private WheelSpinningUseCase UseCase { get; } = new();
 
     protected abstract WheelSetting GetWheel();
+
+    public void SetUserId(string userId)
+    {
+        CurrentUserId = userId;
+    }
 
     public void RigTheWheelToLandOn(string result)
     {
@@ -44,7 +50,7 @@ public abstract class SpinningDsl
     {
         var wheel = GetWheel();
 
-        var result = UseCase.SpinTheWheel(wheel, NextSpinOptions);
+        var result = UseCase.SpinTheWheel(wheel, NextSpinOptions, CurrentUserId);
 
         if (result.Status == FeatureResultStatus.Error)
             LastErrorMessage = result.Exception!.Message;
@@ -83,5 +89,39 @@ public abstract class SpinningDsl
     public void AssertThatWheelSpinErroredWith(string errorMessage)
     {
         Assert.That(LastErrorMessage, Contains.Substring(errorMessage));
+    }
+
+    public void AssertLastTwoSpinsAreDifferent()
+    {
+        if (SpinHistory.Count < 2)
+            Assert.Fail("Not enough spins to compare");
+
+        var lastSpin = SpinHistory[SpinHistory.Count - 1].SliceLanded;
+        var previousSpin = SpinHistory[SpinHistory.Count - 2].SliceLanded;
+
+        Assert.That(lastSpin, Is.Not.EqualTo(previousSpin));
+    }
+
+    public void AssertLastSpinIs(string expected)
+    {
+        if (SpinHistory.Count == 0)
+            Assert.Fail("No spins recorded");
+
+        var lastSpin = SpinHistory[SpinHistory.Count - 1].GetLandedLabel();
+        Assert.That(lastSpin, Is.EqualTo(expected));
+    }
+
+    public void AssertNoConsecutiveDuplicates()
+    {
+        for (int i = 1; i < SpinHistory.Count; i++)
+        {
+            var currentSpin = SpinHistory[i].SliceLanded;
+            var previousSpin = SpinHistory[i - 1].SliceLanded;
+            
+            if (currentSpin == previousSpin)
+            {
+                Assert.Fail($"Found consecutive duplicates at positions {i-1} and {i}");
+            }
+        }
     }
 }
