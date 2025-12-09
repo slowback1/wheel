@@ -73,7 +73,7 @@ public class IntervalScheduler
             );
 
             var result = spinResult.Data?.GetLandedLabel() ?? "No result";
-            Console.WriteLine($"Interval '{interval.Name}' executed: {result}");
+            Console.WriteLine($"Interval '{interval.Name}' for user '{interval.Username}' executed: {result}");
 
             // Update the last run time and calculate next run time
             var now = DateTime.UtcNow;
@@ -104,54 +104,5 @@ public class IntervalScheduler
             IntervalFrequency.Yearly => from.AddYears(1),
             _ => from.AddHours(1)
         };
-    }
-
-    public delegate Task<string> IntervalExecutionHandler(string username, string presetName, string result);
-
-    public event IntervalExecutionHandler? OnIntervalExecuted;
-
-    private async Task ExecuteIntervalWithNotification(Interval interval)
-    {
-        try
-        {
-            // Get the preset
-            var preset = await _dataAccess.WheelRetriever.GetWheelSetting(interval.PresetName);
-
-            if (preset == null)
-            {
-                Console.WriteLine($"Preset '{interval.PresetName}' not found for interval '{interval.Name}'");
-                return;
-            }
-
-            // Spin the wheel
-            var spinResult = new WheelSpinningUseCase().SpinTheWheel(
-                preset,
-                new WheelSpinOptions { Mode = WheelSpinMode.Random }
-            );
-
-            var result = spinResult.Data?.GetLandedLabel() ?? "No result";
-            Console.WriteLine($"Interval '{interval.Name}' executed: {result}");
-
-            // Notify via event
-            if (OnIntervalExecuted != null)
-            {
-                await OnIntervalExecuted(interval.Username, interval.PresetName, result);
-            }
-
-            // Update the last run time and calculate next run time
-            var now = DateTime.UtcNow;
-            var nextRun = CalculateNextRunTime(now, interval.Frequency);
-
-            await _dataAccess.IntervalUpdater.UpdateIntervalLastRun(
-                interval.Username,
-                interval.Name,
-                now,
-                nextRun
-            );
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error executing interval '{interval.Name}': {ex.Message}");
-        }
     }
 }
