@@ -110,4 +110,18 @@ public abstract class SpinningDsl
         var lastSpin = SpinHistory[SpinHistory.Count - 1].GetLandedLabel();
         Assert.That(lastSpin, Is.EqualTo(expected));
     }
+
+    public void AssertNoConsecutiveDuplicates()
+    {
+        for (int i = 1; i < SpinHistory.Count; i++)
+        {
+            var currentSpin = SpinHistory[i].SliceLanded;
+            var previousSpin = SpinHistory[i - 1].SliceLanded;
+            
+            if (currentSpin == previousSpin)
+            {
+                Assert.Fail($"Found consecutive duplicates at positions {i-1} and {i}");
+            }
+        }
+    }
 }

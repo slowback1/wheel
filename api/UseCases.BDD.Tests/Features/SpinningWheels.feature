@@ -56,3 +56,9 @@
         When I spin the wheel
         And I spin the wheel
         Then The last spin should be "Red"
+
+    Scenario: User spins a wheel multiple times - should never get consecutive duplicates
+        Given I have a wheel with "Red", "Green", "Blue"
+        And I am a user with id "user1"
+        When I spin the wheel "10" times
+        Then The wheel should land on "Red" or "Green" or "Blue" "10" times
