@@ -17,12 +17,14 @@ internal abstract class FileRepository
 
     protected List<FileUser> Users { get; set; }
     protected List<FileWheel> Wheels { get; set; }
+    protected List<FileInterval> Intervals { get; set; }
 
     protected void Load()
     {
         var fileStore = _retriever.GetFileStore();
         Users = fileStore.Users.ToList();
         Wheels = fileStore.Wheels.ToList();
+        Intervals = fileStore.Intervals.ToList();
     }
 
     protected void SaveChanges()
@@ -30,7 +32,8 @@ internal abstract class FileRepository
         _retriever.SaveFileStore(new FileStore
         {
             Users = Users,
-            Wheels = Wheels
+            Wheels = Wheels,
+            Intervals = Intervals
         });
     }
 }

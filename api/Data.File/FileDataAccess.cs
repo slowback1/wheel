@@ -15,6 +15,10 @@ public class FileDataAccess : IDataAccess
         UserRetriever = new FileUserRetriever(store);
         WheelUpdater = new FileWheelUpdater(store);
         WheelDeleter = new FileWheelDeleter(store);
+        IntervalCreator = new FileIntervalCreator(store);
+        IntervalRetriever = new FileIntervalRetriever(store);
+        IntervalDeleter = new FileIntervalDeleter(store);
+        IntervalUpdater = new FileIntervalUpdater(store);
     }
 
     public IWheelCreator WheelCreator { get; }
@@ -23,4 +27,8 @@ public class FileDataAccess : IDataAccess
     public IUserRetriever UserRetriever { get; }
     public IWheelUpdater WheelUpdater { get; }
     public IWheelDeleter WheelDeleter { get; }
+    public IIntervalCreator IntervalCreator { get; }
+    public IIntervalRetriever IntervalRetriever { get; }
+    public IIntervalDeleter IntervalDeleter { get; }
+    public IIntervalUpdater IntervalUpdater { get; }
 }

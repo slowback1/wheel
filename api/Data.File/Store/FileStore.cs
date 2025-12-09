@@ -7,4 +7,5 @@ internal class FileStore
 {
     public IEnumerable<FileUser> Users { get; set; } = new List<FileUser>();
     public IEnumerable<FileWheel> Wheels { get; set; } = new List<FileWheel>();
+    public IEnumerable<FileInterval> Intervals { get; set; } = new List<FileInterval>();
 }

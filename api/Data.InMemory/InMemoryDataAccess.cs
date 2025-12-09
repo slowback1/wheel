@@ -10,4 +10,8 @@ public class InMemoryDataAccess : IDataAccess
     public IUserRetriever UserRetriever { get; } = new InMemoryUserRetriever();
     public IWheelUpdater WheelUpdater { get; } = new InMemoryWheelUpdater();
     public IWheelDeleter WheelDeleter { get; } = new InMemoryWheelDeleter();
+    public IIntervalCreator IntervalCreator { get; } = new InMemoryIntervalCreator();
+    public IIntervalRetriever IntervalRetriever { get; } = new InMemoryIntervalRetriever();
+    public IIntervalDeleter IntervalDeleter { get; } = new InMemoryIntervalDeleter();
+    public IIntervalUpdater IntervalUpdater { get; } = new InMemoryIntervalUpdater();
 }
