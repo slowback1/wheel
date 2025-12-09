@@ -38,7 +38,14 @@ client.Ready += handler.OnReady;
 
 // Initialize the interval scheduler
 var dataAccess = DataAccessRetriever.GetDataAccess();
-var scheduler = new IntervalScheduler(dataAccess);
+var scheduler = new IntervalScheduler(dataAccess, s =>
+{
+    //todo: set up the interval settings to send message to a specific channel
+    // it should be the same channel where the command was issued
+    // For now, just log to console, which should be removed/replaced with the actual message sending logic
+    Console.WriteLine($"Interval Scheduler Message: {s}");
+    return Task.CompletedTask;
+});
 scheduler.Start();
 Console.WriteLine("Interval scheduler started");
 

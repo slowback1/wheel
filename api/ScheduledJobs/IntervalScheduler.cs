@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Common.Data;
 using Common.Interfaces;
 using UseCases.Spinning;
@@ -12,18 +7,20 @@ namespace ScheduledJobs;
 public class IntervalScheduler
 {
     private readonly IDataAccess _dataAccess;
+    private readonly Func<string, Task> _sendMessage;
     private Timer? _timer;
 
-    public IntervalScheduler(IDataAccess dataAccess)
+    public IntervalScheduler(IDataAccess dataAccess, Func<string, Task> sendMessage)
     {
         _dataAccess = dataAccess;
+        _sendMessage = sendMessage;
     }
 
     public void Start()
     {
         // Run immediately and then every hour
         _timer = new Timer(
-            _ => 
+            _ =>
             {
                 // Use Task.Run to avoid blocking and handle exceptions
                 Task.Run(async () =>
@@ -56,10 +53,7 @@ public class IntervalScheduler
         {
             var dueIntervals = await _dataAccess.IntervalRetriever.GetIntervalsDueForExecution();
 
-            foreach (var interval in dueIntervals)
-            {
-                await ExecuteInterval(interval);
-            }
+            foreach (var interval in dueIntervals) await ExecuteInterval(interval);
         }
         catch (Exception ex)
         {
@@ -73,21 +67,24 @@ public class IntervalScheduler
         {
             // Get the preset
             var preset = await _dataAccess.WheelRetriever.GetWheelSetting(interval.PresetName);
-
+            string message;
             if (preset == null)
             {
-                Console.WriteLine($"Preset '{interval.PresetName}' not found for interval '{interval.Name}'");
-                return;
+                message = $"Preset '{interval.PresetName}' not found for interval '{interval.Name}'";
+            }
+            else
+            {
+                // Spin the wheel
+                var spinResult = new WheelSpinningUseCase().SpinTheWheel(
+                    preset,
+                    new WheelSpinOptions { Mode = WheelSpinMode.Random }
+                );
+
+                var result = spinResult.Data?.GetLandedLabel() ?? "No result";
+                message = $"Interval '{interval.Name}' for user '{interval.Username}' executed: {result}";
             }
 
-            // Spin the wheel
-            var spinResult = new WheelSpinningUseCase().SpinTheWheel(
-                preset,
-                new WheelSpinOptions { Mode = WheelSpinMode.Random }
-            );
-
-            var result = spinResult.Data?.GetLandedLabel() ?? "No result";
-            Console.WriteLine($"Interval '{interval.Name}' for user '{interval.Username}' executed: {result}");
+            await _sendMessage(message);
 
             // Update the last run time and calculate next run time
             var now = DateTime.UtcNow;

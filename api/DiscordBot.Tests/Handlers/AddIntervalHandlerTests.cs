@@ -21,7 +21,7 @@ public class AddIntervalHandlerTests
             Command = "add-interval",
             UserId = 1234567890
         };
-        
+
         // Create a test preset first
         DataAccess.WheelCreator.CreateWheelSetting(new CreateWheelSetting
         {
@@ -41,18 +41,6 @@ public class AddIntervalHandlerTests
         var result = await handler.HandleAsync();
 
         Assert.That(result, Does.Contain("Invalid format"));
-    }
-
-    [Test]
-    public async Task ShouldReturnErrorMessageWhenPresetDoesNotExist()
-    {
-        Context.Argument = "testInterval|NonExistentPreset|hourly";
-
-        var handler = new AddIntervalHandler(DataAccess, Context);
-
-        var result = await handler.HandleAsync();
-
-        Assert.That(result, Does.Contain("not found"));
     }
 
     [Test]

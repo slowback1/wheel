@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Common.Data;
 using Common.Interfaces;
 
@@ -11,7 +7,13 @@ public class TestIntervalCreator : IIntervalCreator
 {
     public Task<SaveResult<Interval>> CreateInterval(CreateInterval interval)
     {
-        return Task.FromResult(SaveResult<Interval>.Failure("Test interval storage not implemented"));
+        return Task.FromResult(SaveResult<Interval>.Success(new Interval
+        {
+            Username = interval.Username,
+            Frequency = interval.Frequency,
+            Name = interval.Name,
+            PresetName = interval.PresetName
+        }));
     }
 }
 
@@ -43,7 +45,8 @@ public class TestIntervalDeleter : IIntervalDeleter
 
 public class TestIntervalUpdater : IIntervalUpdater
 {
-    public Task<SaveResult<Interval>> UpdateIntervalLastRun(string username, string intervalName, DateTime lastRunTime, DateTime nextRunTime)
+    public Task<SaveResult<Interval>> UpdateIntervalLastRun(string username, string intervalName, DateTime lastRunTime,
+        DateTime nextRunTime)
     {
         return Task.FromResult(SaveResult<Interval>.Failure("Test interval storage not implemented"));
     }
