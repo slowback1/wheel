@@ -10,4 +10,8 @@ public class TestDataAccess : IDataAccess
     public IUserRetriever UserRetriever { get; } = new TestUserRetriever();
     public IWheelUpdater WheelUpdater { get; } = new TestWheelUpdater();
     public IWheelDeleter WheelDeleter { get; } = new TestWheelDeleter();
+    public IIntervalCreator IntervalCreator { get; } = new TestIntervalCreator();
+    public IIntervalRetriever IntervalRetriever { get; } = new TestIntervalRetriever();
+    public IIntervalDeleter IntervalDeleter { get; } = new TestIntervalDeleter();
+    public IIntervalUpdater IntervalUpdater { get; } = new TestIntervalUpdater();
 }

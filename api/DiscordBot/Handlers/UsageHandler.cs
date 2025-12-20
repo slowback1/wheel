@@ -20,7 +20,11 @@ public class UsageHandler : BaseDiscordHandler, IDiscordHandler
 !spin-preset <name> - Spins the wheel with the specified preset
 !update <name>|<comma separated list> - Updates the specified preset with the new settings
 !describe <name> - Lists the possible options for the specified preset
-!delete <name> - Deletes the specified preset 
+!delete <name> - Deletes the specified preset
+!add-interval <intervalName>|<presetName>|<frequency> - Creates an interval to run a preset automatically (frequency: hourly, daily, weekly, monthly, quarterly, yearly)
+!view-interval <intervalName> - Shows details of a specific interval
+!list-intervals - Lists all your intervals
+!remove-interval <intervalName> - Removes an interval
 ";
     }
 }
