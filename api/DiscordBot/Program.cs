@@ -42,8 +42,7 @@ var scheduler = new IntervalScheduler(dataAccess, async (channelId, message) =>
 {
     try
     {
-        var channel = client.GetChannel(channelId) as IMessageChannel;
-        if (channel != null)
+        if (client.GetChannel(channelId) is IMessageChannel channel)
         {
             await channel.SendMessageAsync(message);
             Console.WriteLine($"Sent message to channel {channelId}: {message}");
